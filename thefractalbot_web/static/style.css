@@ -88,7 +88,7 @@ a {
 }
 
 .fractal {
-    width: 80%;
+    width: 78%;
     height: 100vh;
     object-fit: cover;
     object-position: center;
@@ -101,6 +101,7 @@ a {
 /*e2f2f7*/
 /*e2e8f0*/
 aside {
+    width: 22%;
     background: #1a202c;
     padding: 0.8rem;
     display: flex;
@@ -117,6 +118,7 @@ aside {
     margin-top: 1rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .spec li .label {
@@ -124,8 +126,16 @@ aside {
     padding-right: 2em;
 }
 
-.spec li .label + span {
+.spec li span:not(.label) {
     text-align: right;
+}
+
+.gradient-container {
+    display: flex;
+}
+.color-rect {
+    width: 1.5em;
+    height: 1.5em;
 }
 
 footer {
@@ -135,4 +145,8 @@ footer {
 
 footer a {
 
+}
+
+abbr {
+    text-decoration: none;
 }
