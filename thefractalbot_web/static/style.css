@@ -24,6 +24,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+    text-decoration: none;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -51,19 +52,65 @@ table {
 
 /*LA CEST A MOI*/
 
+:root {
+    --blue-900: #f7fafc;
+    --blue-800: #e2f2f7;
+    --blue-700: #e2e8f0;
+    --blue-500: #a0aec0;
+    --blue-400: #7488a5;
+    --blue-300: #516482;
+    --blue-200: #354157;
+    --blue-100: #1a202c;
+    --orange: #ffa500;
+}
+
 
 body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    color: #f7fafc;
-    background: #1a202c;
+    color: var(--blue-900);
+    background: var(--blue-100);
 
 }
 
 a {
     text-decoration: none;
-    color: #ffa500;
+    color: var(--orange);
+}
+
+.big__title {
+    font-size: 2em;
+    color: var(--blue-700);
+    position: center;
+    padding: 0.3em;
+}
+
+.brouse__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.brouse__card {
+    display: flex;
+    flex-direction: column;
+    width: 18%;
+    padding: 0.5em;
+    margin: 0.3em;
+    border-radius: 0.25rem;
+    background: var(--blue-200);
+}
+
+.card__img {
+    width: 100%;
+}
+
+.card__title {
+    position: center;
+    text-align: center;
+    padding-top: 0.5em;
+    color: var(--blue-700);
 }
 
 .navbar {
@@ -78,14 +125,14 @@ a {
 
 
 .aside__title {
-    color: #e2e8f0;
+    color: var(--blue-700);
     margin-top: 1rem;
     font-size: 1.5rem;
 }
 
 .aside__subtitle {
     display: block;
-    color: #a0aec0;
+    color: var(--blue-500);
     margin-top: 0.5em;
 }
 
@@ -99,9 +146,7 @@ a {
 .container {
     display: flex;
 }
-/*f7fafc*/
-/*e2f2f7*/
-/*e2e8f0*/
+
 aside {
     width: 22%;
     padding: 0.8rem;
@@ -146,8 +191,4 @@ footer {
 
 footer a {
 
-}
-
-abbr {
-    text-decoration: none;
 }

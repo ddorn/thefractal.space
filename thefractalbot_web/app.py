@@ -50,7 +50,7 @@ def random():
 
 @app.route("/brouse")
 def brouse():
-    return render_template("brouse.html")
+    return render_template("brouse.html", today=datetime.today(), one_day=timedelta(days=1))
 
 if __name__ == '__main__':
     app.run(debug=True)
