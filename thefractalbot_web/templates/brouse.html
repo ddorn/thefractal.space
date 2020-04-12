@@ -9,30 +9,18 @@
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
 </head>
 <body>
-  <h1 class="aside__title">Daily Fractals</h1>
-  <section>
-      <div>
-          <img src="{{ url_for("static", filename="bg.png") }}" alt="">
-          <time datetime="d-m-Y">20 Avr 2020</time>
-      </div>
+  <h1 class="big__title">Daily Fractals</h1>
+  <section class="brouse__container">
 
-      <div>
-          <img src="{{ url_for("static", filename="bg.png") }}" alt="">
-          <time>20 Avr 2020</time>
-      </div>
+      {% for i in range(10) %}
+          <div class="brouse__card">
+              <img src="{{ url_for("static", filename="bg.png") }}" alt="" class="card__img">
+              <time datetime="d-m-Y" class="card__title">
+                  {{ (today - i * one_day).strftime("%d %b %Y") }}
+              </time>
+          </div>
+      {% endfor %}
 
-      <div>
-          <img src="{{ url_for("static", filename="bg.png") }}" alt="">
-          <time>20 Avr 2020</time>
-      </div>
-      <div>
-          <img src="{{ url_for("static", filename="bg.png") }}" alt="">
-          <time>20 Avr 2020</time>
-      </div>
-      <div>
-          <img src="{{ url_for("static", filename="bg.png") }}" alt="">
-          <time>20 Avr 2020</time>
-      </div>
   </section>
 
 </body>
