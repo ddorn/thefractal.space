@@ -48,5 +48,9 @@ def random():
     return fractal_page(random_fractal(seed=seed), "Random Fractal", f"Seed - {seed}")
 
 
+@app.route("/brouse")
+def brouse():
+    return render_template("brouse.html")
+
 if __name__ == '__main__':
     app.run(debug=True)

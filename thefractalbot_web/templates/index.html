@@ -15,34 +15,34 @@
             <div>
                 <nav class="navbar">
                     <a href="{{ url_for("latest") }}">Latest</a>
-                    <a href="browse.html">Brouse</a>
+                    <a href="{{ url_for("brouse") }}">Brouse</a>
                     <a href="{{ url_for("random") }}">Random</a>
                     <a href="about.html">About</a>
                 </nav>
 
-                <h1 class="title">{{ title }}</h1>
+                <h1 class="aside__title">{{ title }}</h1>
                 {% if date %}
-                    <time datetime="d-m-Y" class="subtitle">{{ date.strftime("%d %b %Y") }}</time>
+                    <time datetime="d-m-Y" class="aside__subtitle">{{ date.strftime("%d %b %Y") }}</time>
                 {% else %}
-                    <h2 class="subtitle">{{ subtitle }}</h2>
+                    <h2 class="aside__subtitle">{{ subtitle }}</h2>
                 {% endif %}
 
-                <ol class="spec">
+                <ol class="aside__spec">
                     {% for info in infos %}
                         <li>
                             {% if info.hint %}
                                 <abbr title="{{ info.hint }}">
-                                    <span class="label">{{ info.label }}</span>
+                                    <span class="spec__label">{{ info.label }}</span>
                                 </abbr>
                             {% else %}
-                                <span class="label">{{ info.label }}</span>
+                                <span class="spec__label">{{ info.label }}</span>
                             {% endif %}
                             <span>{{ info.value }}</span>
                         </li>
                     {% endfor %}
 
                     <li>
-                        <span class="label">Gradient</span>
+                        <span class="spec__label">Gradient</span>
                         <span class="gradient-container">
                             {% for color in gradient %}
                                 <div class="color-rect" style="background: {{ color }}"></div>
