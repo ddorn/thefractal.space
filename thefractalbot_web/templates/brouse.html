@@ -12,13 +12,14 @@
   <h1 class="big__title">Daily Fractals</h1>
   <section class="brouse__container">
 
-      {% for i in range(10) %}
-          <div class="brouse__card">
-              <img src="{{ url_for("static", filename="bg.png") }}" alt="" class="card__img">
+      {% for day in days %}
+          <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
+              <img src="{{ url_for("static", filename=day.strftime("df/%Y-%m-%d-small.png")) }}"
+                   alt="" class="card__img">
               <time datetime="d-m-Y" class="card__title">
-                  {{ (today - i * one_day).strftime("%d %b %Y") }}
+                  {{ day.strftime("%d %b %Y") }}
               </time>
-          </div>
+          </a>
       {% endfor %}
 
   </section>

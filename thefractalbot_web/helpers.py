@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
 from math import log10
+from pathlib import Path
 from typing import List
 
 from brocoli.fractal import Fractal
+from brocoli.processing.random_fractal import random_fractal
 from markupsafe import Markup
 from werkzeug.routing import BaseConverter, ValidationError
 
@@ -80,3 +82,28 @@ def infos(fractal: Fractal) -> List[Info]:
     ))
 
     return infos
+
+
+def _daily_fractal(date):
+
+    today = date.strftime("%d %b %Y")
+    fractal = random_fractal(seed=today)
+
+    return fractal
+
+
+def ensure_daily_exists(date):
+    path = Path(__file__).parent / "static" / "df"
+    # Make sure the directory exists
+    path.mkdir(exist_ok=True)
+
+    path /= date.strftime("%Y-%m-%d-small.png")
+
+    if not path.exists():
+        fractal = daily_fractal(date)
+        fractal.camera.size = (192, 108)
+        img = fractal.render(True)
+        img.save(path)
+
+
+
