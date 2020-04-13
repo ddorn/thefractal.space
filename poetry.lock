@@ -24,7 +24,6 @@ tests = ["coverage", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "zope.i
 [[package]]
 category = "main"
 description = ""
-develop = true
 name = "brocoli"
 optional = false
 python-versions = "^3.7"
@@ -43,10 +42,9 @@ tweepy = "^3.8.0"
 gui = ["kivy (^1.1)", "kivymd (^0.104.0)"]
 
 [package.source]
-reference = ""
-type = "directory"
-url = "../brocoli"
-
+reference = "d3928942fdf522adfffc45e5ab2b124446a20242"
+type = "git"
+url = "https://gitlab.com/ddorn/brocoli"
 [[package]]
 category = "main"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -132,7 +130,7 @@ description = "A very fast and expressive template engine."
 name = "jinja2"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-version = "2.11.1"
+version = "2.11.2"
 
 [package.dependencies]
 MarkupSafe = ">=0.23"
@@ -372,7 +370,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "3d8207a7e258ce566a458475c3fd531848c17cbe24b850febe6e3bcb75fcd0ad"
+content-hash = "01cfbe939071fd7ec4d0449f4edd4e85174a395a1605160c1b4988dd77b09f68"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -418,8 +416,8 @@ itsdangerous = [
     {file = "itsdangerous-1.1.0.tar.gz", hash = "sha256:321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19"},
 ]
 jinja2 = [
-    {file = "Jinja2-2.11.1-py2.py3-none-any.whl", hash = "sha256:b0eaf100007721b5c16c1fc1eecb87409464edc10469ddc9a22a27a99123be49"},
-    {file = "Jinja2-2.11.1.tar.gz", hash = "sha256:93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250"},
+    {file = "Jinja2-2.11.2-py2.py3-none-any.whl", hash = "sha256:f0a4641d3cf955324a89c04f3d94663aa4d638abe8f733ecd3582848e1c37035"},
+    {file = "Jinja2-2.11.2.tar.gz", hash = "sha256:89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0"},
 ]
 llvmlite = [
     {file = "llvmlite-0.31.0-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:00fdf20d2f4972a00bcfaa9ce62ee55208ae5df38906a198650ddf91ba6a5fba"},

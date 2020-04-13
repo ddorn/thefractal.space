@@ -7,7 +7,7 @@ authors = ["ddorn <diego.dorn@free.fr>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 flask = "^1.1.2"
-brocoli = {path = "../brocoli"}
+brocoli = { git = "https://gitlab.com/ddorn/brocoli" }
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
