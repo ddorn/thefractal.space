@@ -9,12 +9,20 @@
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
 </head>
 <body>
-  <h1 class="big__title">Daily Fractals</h1>
-  <section class="brouse__container">
+    <nav class="top_bar separate_two">
+        <h1 class="big__title">Daily Fractals</h1>
+        <div class="navbar">
+            <a href="{{ url_for("latest") }}">Latest</a>
+            <a href="{{ url_for("brouse") }}">Brouse</a>
+            <a href="{{ url_for("random") }}">Random</a>
+            <a href="about.html">About</a>
+        </div>
+    </nav>
+    <section class="brouse__container">
 
       {% for day in days %}
           <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
-              <img src="{{ url_for("static", filename=day.strftime("df/%Y-%m-%d-small.png")) }}"
+              <img src="{{ url_for("static", filename=day.strftime("df/small/%Y-%m-%d.png")) }}"
                    alt="" class="card__img">
               <time datetime="d-m-Y" class="card__title">
                   {{ day.strftime("%d %b %Y") }}
@@ -22,7 +30,7 @@
           </a>
       {% endfor %}
 
-  </section>
+    </section>
 
 </body>
 </html>
