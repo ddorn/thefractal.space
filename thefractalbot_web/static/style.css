@@ -20,7 +20,6 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
 	padding: 0;
-	border: 0;
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
@@ -66,16 +65,17 @@ table {
 
 * {
     /*border: 1px solid white !important;*/
-    border: 0 solid var(--blue-100) !important;
-}
-
-:focus {
-    border: 2px solid var(--orange) !important;
+    border: 0 solid var(--blue-100);
     transition:
             border-bottom-color 0.3s,
             border-left-color 0.3s,
             border-right-color 0.3s,
             border-top-color 0.3s;
+}
+
+:focus {
+    border: 2px solid var(--orange);
+
 }
 
 body {
