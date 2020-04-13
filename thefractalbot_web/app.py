@@ -52,10 +52,15 @@ def random():
 def brouse():
     today = datetime.today()
     one_day = timedelta(1)
-    days = [today - i * one_day for i in range(10)]
+    days = [today - i * one_day for i in range(60)]
     for day in days:
         ensure_daily_exists(day)
-    return render_template("brouse.html", days=days)
+    return render_template("brouse.html", days=days, title="Browse")
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html", title="About")
 
 
 if __name__ == '__main__':

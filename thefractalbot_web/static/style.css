@@ -20,8 +20,8 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
 	padding: 0;
-	font-size: 100%;
 	font: inherit;
+	font-size: 100%;
 	vertical-align: baseline;
     text-decoration: none;
 }
@@ -61,11 +61,14 @@ table {
     --blue-200: #354157;
     --blue-100: #1a202c;
     --orange: #ffa500;
+    --font-fat: "Cantarell", sans-serif;
+    --font-thin: "Cantarell Light", sans-serif;
 }
 
 * {
     /*border: 1px solid white !important;*/
     border: 0 solid var(--blue-100);
+    box-sizing: border-box;
 }
 
 :focus {
@@ -77,20 +80,24 @@ table {
             border-top-color 0.3s;
 }
 
+em {
+    font-style: italic;
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
+    font-family: var(--font-thin);
     color: var(--blue-900);
     background: var(--blue-100);
-    box-sizing: border-box;
 }
 
 .narrow_container {
-    max-width: 80%;
+    max-width: 75%;
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
+    margin: 0 auto 2em auto;
+
 }
 
 a {
@@ -103,26 +110,27 @@ a:hover {
 }
 
 .top_bar {
-    padding: 1.5em 1.5em;
+    padding: 1.5em 0;
     align-items: center;
     /*background: var(--blue-100);*/
 }
 
-.big__title {
+.bar__title {
     color: var(--blue-700);
     position: center;
+    font-family: var(--font-fat);
 }
 
 .top_bar .navbar a {
     margin-left: 2em;
     padding: 0;
+    font-family: var(--font-fat);
 }
 
 
 .brouse__container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    padding: 0 1.5em;
     grid-gap: 1em;
 }
 
@@ -161,6 +169,7 @@ a:hover {
 
 .navbar a {
     margin: 0 0 0 0.5rem ;
+    font-family: var(--font-fat);
 }
 
 
@@ -168,6 +177,7 @@ a:hover {
     color: var(--blue-700);
     margin-top: 1rem;
     font-size: 1.5rem;
+    font-family: var(--font-fat);
 }
 
 .aside__subtitle {
@@ -227,4 +237,23 @@ aside {
 .separate_two {
     display: flex;
     justify-content: space-between;
+}
+
+.title--about {
+    font-size: 2em;
+    color: var(--orange);
+    font-family: var(--font-fat);
+}
+
+.section__title--about {
+    font-size: 1.5em;
+    margin-top: 1.5em;
+    font-family: var(--font-fat);
+}
+
+.p--about {
+    margin-top: 1em;
+    width: 50%;
+    text-align: justify;
+    line-height: 1.25em;
 }
