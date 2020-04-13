@@ -66,16 +66,15 @@ table {
 * {
     /*border: 1px solid white !important;*/
     border: 0 solid var(--blue-100);
+}
+
+:focus {
+    border: 2px solid var(--orange);
     transition:
             border-bottom-color 0.3s,
             border-left-color 0.3s,
             border-right-color 0.3s,
             border-top-color 0.3s;
-}
-
-:focus {
-    border: 2px solid var(--orange);
-
 }
 
 body {
