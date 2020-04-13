@@ -9,28 +9,30 @@
     <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
 </head>
 <body>
-    <nav class="top_bar separate_two">
-        <h1 class="big__title">Daily Fractals</h1>
-        <div class="navbar">
-            <a href="{{ url_for("latest") }}">Latest</a>
-            <a href="{{ url_for("brouse") }}">Brouse</a>
-            <a href="{{ url_for("random") }}">Random</a>
-            <a href="about.html">About</a>
-        </div>
-    </nav>
-    <section class="brouse__container">
+    <div class="narrow_container">
+        <nav class="top_bar separate_two">
+            <h1 class="big__title">Daily Fractals</h1>
+            <div class="navbar">
+                <a href="{{ url_for("latest") }}">Latest</a>
+                <a href="{{ url_for("brouse") }}">Brouse</a>
+                <a href="{{ url_for("random") }}">Random</a>
+                <a href="about.html">About</a>
+            </div>
+        </nav>
+        <section class="brouse__container">
 
-      {% for day in days %}
-          <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
-              <img src="{{ url_for("static", filename=day.strftime("df/small/%Y-%m-%d.png")) }}"
-                   alt="" class="card__img">
-              <time datetime="d-m-Y" class="card__title">
-                  {{ day.strftime("%d %b %Y") }}
-              </time>
-          </a>
-      {% endfor %}
+          {% for day in days %}
+              <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
+                  <img src="{{ url_for("static", filename=day.strftime("df/small/%Y-%m-%d.png")) }}"
+                       alt="" class="card__img">
+                  <time datetime="d-m-Y" class="card__title">
+                      {{ day.strftime("%d %b %Y") }}
+                  </time>
+              </a>
+          {% endfor %}
 
-    </section>
+        </section>
+    </div>
 
 </body>
 </html>
