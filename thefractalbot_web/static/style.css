@@ -325,4 +325,8 @@ aside {
         min-height: 70vh;
         justify-content: space-between;
     }
+
+    .p--about {
+        width: 100%;
+    }
 }
