@@ -49,6 +49,29 @@ table {
 	border-spacing: 0;
 }
 
+
+/* Gilroy Medium */
+@font-face {
+    font-family: "Gilroy";
+    src: url("/static/fonts/gilroy/Gilroy-Medium.eot");
+    src: local("☞Gilroy-Medium"), local("Gilroy-Medium"), url("/static/fonts/gilroy/Gilroy-Medium.eot?#iefix") format("embedded-opentype"), url("/static/fonts/gilroy/Gilroy-Medium.woff2") format("woff2"), url("/static/fonts/gilroy/Gilroy-Medium.woff") format("woff"), url("/static/fonts/gilroy/Gilroy-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+}
+/* END Gilroy Medium */
+
+
+/* Gilroy Bold */
+@font-face {
+    font-family: "Gilroy";
+        src: url("/static/fonts/gilroy/Gilroy-Bold.eot");
+        src: local("☞Gilroy-Bold"), local("Gilroy-Bold"), url("/static/fonts/gilroy/Gilroy-Bold.eot?#iefix") format("embedded-opentype"), url("/static/fonts/gilroy/Gilroy-Bold.woff2") format("woff2"), url("/static/fonts/gilroy/Gilroy-Bold.woff") format("woff"), url("/static/fonts/gilroy/Gilroy-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* END Gilroy Bold *
+
 /*LA CEST A MOI*/
 
 :root {
@@ -61,8 +84,6 @@ table {
     --blue-200: #354157;
     --blue-100: #1a202c;
     --orange: #ffa500;
-    --font-fat: "Cantarell", sans-serif;
-    --font-thin: "Cantarell Light", sans-serif;
 }
 
 * {
@@ -87,7 +108,7 @@ em {
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-thin);
+    font-family: "Gilroy", sans-serif;
     color: var(--blue-900);
     background: var(--blue-100);
 }
@@ -96,7 +117,7 @@ body {
     max-width: 75%;
     display: flex;
     flex-direction: column;
-    margin: 0 auto 2em auto;
+    margin: 0 auto 2rem auto;
 
 }
 
@@ -110,7 +131,7 @@ a:hover {
 }
 
 .top_bar {
-    padding: 1.5em 0;
+    padding: 1.5rem 0;
     align-items: center;
     /*background: var(--blue-100);*/
 }
@@ -118,20 +139,20 @@ a:hover {
 .bar__title {
     color: var(--blue-700);
     position: center;
-    font-family: var(--font-fat);
+    font-weight: bold;
 }
 
 .top_bar .navbar a {
-    margin-left: 2em;
+    margin-left: 2rem;
     padding: 0;
-    font-family: var(--font-fat);
+    font-weight: bold;
 }
 
 
 .brouse__container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 1em;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-gap: 1rem;
 }
 
 .brouse__card {
@@ -150,14 +171,14 @@ a:hover {
 
 .card__img {
     width: 100%;
-    border-radius: 0.25em 0.25em 0 0;
+    border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .card__title {
     position: center;
     text-align: right;
-    font-size: 0.75em;
-    padding: 1em;
+    font-size: 0.75rem;
+    padding: 1rem;
     color: var(--blue-500);
 }
 
@@ -169,7 +190,7 @@ a:hover {
 
 .navbar a {
     margin: 0 0 0 0.5rem ;
-    font-family: var(--font-fat);
+    font-weight: bold;
 }
 
 
@@ -177,13 +198,13 @@ a:hover {
     color: var(--blue-700);
     margin-top: 1rem;
     font-size: 1.5rem;
-    font-family: var(--font-fat);
+    font-weight: bold;
 }
 
 .aside__subtitle {
     display: block;
     color: var(--blue-500);
-    margin-top: 0.5em;
+    margin-top: 0.5rem;
 }
 
 .fractal {
@@ -219,7 +240,7 @@ aside {
 
 .aside__spec li .spec__label {
     color: #cbd5e0;
-    padding-right: 2em;
+    padding-right: 2rem;
 }
 
 .aside__spec li span:not(.spec__label) {
@@ -230,8 +251,8 @@ aside {
     display: flex;
 }
 .color-rect {
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 .separate_two {
@@ -240,20 +261,27 @@ aside {
 }
 
 .title--about {
-    font-size: 2em;
+    font-size: 2rem;
     color: var(--orange);
-    font-family: var(--font-fat);
+    font-weight: bold;
 }
 
 .section__title--about {
-    font-size: 1.5em;
-    margin-top: 1.5em;
-    font-family: var(--font-fat);
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    font-weight: bold;
 }
 
 .p--about {
-    margin-top: 1em;
+    margin-top: 1rem;
     width: 50%;
     text-align: justify;
-    line-height: 1.25em;
+    line-height: 1.25rem;
+}
+
+.brouse__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 2rem 0 2rem;
+    font-weight: bold;
 }
