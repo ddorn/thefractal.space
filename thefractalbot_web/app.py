@@ -2,7 +2,7 @@ import random as _random
 from datetime import datetime, timedelta
 
 from brocoli.processing.random_fractal import random_fractal
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 
 from thefractalbot_web.helpers import DateConverter, infos, ensure_daily_exists, _daily_fractal, ensure_seed_exists
 
@@ -50,12 +50,17 @@ def random():
 
 @app.route("/brouse")
 def brouse():
-    today = datetime.today()
+    page = request.args.get("page", default=0, type=int)
+    page = max(0, page)  # no negative pages
+
+    fracs_per_page = 12
     one_day = timedelta(1)
-    days = [today - i * one_day for i in range(60)]
+    first = datetime.today() - fracs_per_page * page * one_day
+
+    days = [first - i * one_day for i in range(fracs_per_page)]
     for day in days:
         ensure_daily_exists(day)
-    return render_template("brouse.html", days=days, title="Browse")
+    return render_template("brouse.html", days=days, title="Browse", page=page)
 
 
 @app.route("/about")
