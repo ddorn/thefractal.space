@@ -104,7 +104,7 @@ def ensure_daily_exists(date, small=True):
 
     if not path.exists():
         fractal = _daily_fractal(date)
-        fractal.camera.size = (16*12, 9*12) if small else (16*80, 9*80)
+        fractal.camera.size = (16*18, 9*18) if small else (16*80, 9*80)
         img = fractal.render(True)
         img.save(path)
 
