@@ -285,3 +285,44 @@ aside {
     padding: 2rem 2rem 0 2rem;
     font-weight: bold;
 }
+
+
+@media (max-width: 640px) {
+    .top_bar {
+        flex-direction: column;
+        padding: 1rem 0;
+        align-items: flex-start;
+    }
+    .bar__title {
+        padding-bottom: 0.5rem;
+    }
+    .navbar {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .top_bar .navbar {
+        justify-content: flex-start;
+    }
+    .top_bar .navbar a {
+        margin-right: 1rem;
+        margin-left: 0;
+        justify-content: flex-start;
+
+    }
+
+    .container {
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .fractal {
+        width: 100%;
+        height: 30vh;
+    }
+    aside {
+        width: 100%;
+        min-height: 70vh;
+        justify-content: space-between;
+    }
+}
