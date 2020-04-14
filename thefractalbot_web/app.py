@@ -3,10 +3,10 @@ import random as _random
 from datetime import datetime, timedelta
 
 from brocoli.processing.random_fractal import random_fractal
-from flask import Flask, render_template, redirect, url_for, request, send_file, send_from_directory
+from flask import Flask, render_template, redirect, url_for, request, send_from_directory
 
 from thefractalbot_web.helpers import DateConverter, \
-    infos, ensure_daily_exists, _daily_fractal, \
+    infos, _daily_fractal, \
     path_for_seed, seed_for_date
 
 app = Flask(__name__)
