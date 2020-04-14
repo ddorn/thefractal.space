@@ -88,25 +88,6 @@ def _daily_fractal(date):
     return random_fractal(seed=seed_for_date(date))
 
 
-def ensure_daily_exists(date, small=True):
-    static = Path(__file__).parent / "static"
-    path = static / "df"
-    path /= "small" if small else "big"
-
-    # Make sure the directory exists
-    path.mkdir(exist_ok=True)
-
-    path /= date.strftime(f"%Y-%m-%d.png")
-
-    if not path.exists():
-        fractal = _daily_fractal(date)
-        fractal.camera.size = (16*18, 9*18) if small else (16*80, 9*80)
-        img = fractal.render(True)
-        img.save(path)
-
-    return path.relative_to(static)
-
-
 def path_for_seed(seed, size):
     """Get the path for a given fractal.
 

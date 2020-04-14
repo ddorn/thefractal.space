@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% from "macros/macros.html" import fractal %}
+{% from "macros/macros.html" import fractal, navbar %}
 
 {% block body %}
     <div class="container">
@@ -8,12 +8,7 @@
 
         <aside>
             <div>
-                <nav class="navbar">
-                    <a href="{{ url_for("latest") }}">Latest</a>
-                    <a href="{{ url_for("brouse") }}">Brouse</a>
-                    <a href="{{ url_for("random") }}">Random</a>
-                    <a href="{{ url_for("about") }}">About</a>
-                </nav>
+                {{ navbar() }}
 
                 <h1 class="aside__title">{{ title }}</h1>
                 {% if date %}
