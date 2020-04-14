@@ -1,0 +1,20 @@
+{% macro fractal(seed, large = False, class="") %}
+{# if large: almost fullscreen fractal #}
+{# else: about 200px #}
+<picture class="{{ class }}">
+    {% if large %}
+        <source srcset="{{ url_for("img", seed=seed, size=640) }}"
+            media="(max-width: 640px)">
+        <img src="{{ url_for("img", seed=seed, size=1000) }}"
+             alt="Big Fractal {{ seed }}"
+             class="img_cover"
+        />
+    {% else %}
+        <img src="{{ url_for("img", seed=seed, size=200) }}"
+             alt="Small Fractal {{ seed }}"
+             class="img_cover"
+        />
+    {% endif %}
+
+</picture>
+{% endmacro %}

@@ -85,11 +85,7 @@ def infos(fractal: Fractal) -> List[Info]:
 
 
 def _daily_fractal(date):
-
-    today = date.strftime("%d %b %Y")
-    fractal = random_fractal(seed=today)
-
-    return fractal
+    return random_fractal(seed=seed_for_date(date))
 
 
 def ensure_daily_exists(date, small=True):
@@ -111,18 +107,20 @@ def ensure_daily_exists(date, small=True):
     return path.relative_to(static)
 
 
-def ensure_seed_exists(seed, small=True):
+def path_for_seed(seed, size):
+    """Get the path for a given fractal.
+
+    Please only pass a size that we do have fractals for.
+    """
+
+    assert size in (1280, 640, 200), size
+
     static = Path(__file__).parent / "static"
     path = static / "df"
-    path /= "small" if small else "big"
-
-    # Make sure the directory exists
-    path.mkdir(exist_ok=True)
-
+    path /= str(size)
     path /= seed + ".png"
+    return path
 
-    if not path.exists():
-        fractal = random_fractal((16*12, 9*12) if small else (16*80, 9*80))
-        fractal.render(True).save(path)
 
-    return path.relative_to(static)
+def seed_for_date(date):
+    return date.strftime("%Y-%m-%d")
