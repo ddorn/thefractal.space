@@ -1,0 +1,19 @@
+{% extends "layouts/regular.html" %}
+{% from "macros/macros.html" import fractal, navbar %}
+
+{% block content %}
+    <section class="generate">
+        <h1 class="generate__title">{{ title }}</h1>
+        <form action="{{ url_for("generate") }}" method="get">
+
+            <input aria-label="Fractal Seed"
+                   name="seed" type="text"
+                   placeholder="Enter a seed..."
+                   class="generate_input">
+        </form>
+        <div class="container--overlay">
+            {{ fractal("diego", class="generate__fractal", img_class="gen__img") }}
+            <div class="overlay"></div>
+        </div>
+    </section>
+{% endblock %}

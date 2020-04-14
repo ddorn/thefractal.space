@@ -1,4 +1,4 @@
-{% macro fractal(seed, large = False, class="") %}
+{% macro fractal(seed, large = False, class="", img_class="") %}
 {# if large: almost fullscreen fractal #}
 {# else: about 200px #}
 <picture class="{{ class }}">
@@ -7,23 +7,26 @@
             media="(max-width: 640px)">
         <img src="{{ url_for("img", seed=seed, size=1000) }}"
              alt="Big Fractal {{ seed }}"
-             class="img_cover"
+             class="img_cover {{ img_class }}"
         />
     {% else %}
         <img src="{{ url_for("img", seed=seed, size=200) }}"
              alt="Small Fractal {{ seed }}"
-             class="img_cover"
+             class="img_cover {{ img_class }}"
         />
     {% endif %}
 
+
 </picture>
 {% endmacro %}
+
 
 {% macro navbar() %}
     <nav class="navbar">
         <a href="{{ url_for("latest") }}">Latest</a>
         <a href="{{ url_for("brouse") }}">Brouse</a>
         <a href="{{ url_for("random") }}">Random</a>
+        <a href="{{ url_for("generate") }}">Generate</a>
         <a href="{{ url_for("about") }}">About</a>
     </nav>
 {% endmacro %}
