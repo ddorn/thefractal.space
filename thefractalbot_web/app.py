@@ -7,11 +7,12 @@ from flask import Flask, render_template, redirect, url_for, request, send_from_
 
 from thefractalbot_web.helpers import DateConverter, \
     infos, _daily_fractal, \
-    path_for_seed, seed_for_date
+    path_for_seed, seed_for_date, seed_type, SeedConverter
 
 app = Flask(__name__)
 
 app.url_map.converters['date'] = DateConverter
+app.url_map.converters['seed'] = SeedConverter
 
 
 def fractal_page(fractal, title, seed, subtitle=None, date=None):
@@ -72,7 +73,16 @@ def about():
     return render_template("about.html", title="About")
 
 
-@app.route("/img/<seed>.png")
+@app.route("/generate")
+def generate():
+    seed = request.args.get("seed", type=seed_type)
+    if seed is None:
+        return render_template("generate.html", title="Custom Fractal")
+    return fractal_page(random_fractal(seed=seed), "Custom Fractal", seed, f"Seed: {seed}")
+
+
+
+@app.route("/img/<seed:seed>.png")
 def img(seed):
     size = request.args.get("size", default=200, type=int)
 
