@@ -1,11 +1,12 @@
 {% extends "layouts/regular.html" %}
+{% from "macros/macros.html" import fractal %}
+
 {% block content %}
     <section class="brouse__container">
 
         {% for day in days %}
             <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
-                <img src="{{ url_for("static", filename=day.strftime("df/small/%Y-%m-%d.png")) }}"
-                     alt="" class="card__img">
+                {{ fractal(day.strftime("%Y-%m-%d"), class="card__img")}}
                 <time datetime="d-m-Y" class="card__title">
                     {{ day.strftime("%d %b %Y") }}
                 </time>

@@ -1,17 +1,20 @@
+import logging
 import random as _random
 from datetime import datetime, timedelta
 
 from brocoli.processing.random_fractal import random_fractal
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, send_file, send_from_directory
 
-from thefractalbot_web.helpers import DateConverter, infos, ensure_daily_exists, _daily_fractal, ensure_seed_exists
+from thefractalbot_web.helpers import DateConverter, \
+    infos, ensure_daily_exists, _daily_fractal, \
+    path_for_seed, seed_for_date
 
 app = Flask(__name__)
 
 app.url_map.converters['date'] = DateConverter
 
 
-def fractal_page(fractal, title, src, subtitle=None, date=None):
+def fractal_page(fractal, title, seed, subtitle=None, date=None):
     i = infos(fractal)
     return render_template(
         'index.html',
@@ -21,7 +24,7 @@ def fractal_page(fractal, title, src, subtitle=None, date=None):
         infos=i,
         gradient=fractal.gradient_points,
         one_day=timedelta(days=1),
-        fractal_src=src,
+        seed=seed,
     )
 
 
@@ -32,8 +35,12 @@ def hello_world():
 
 @app.route('/df/<date:date>')
 def daily_fractal(date):
-    fractal_src = ensure_daily_exists(date, small=False)
-    return fractal_page(_daily_fractal(date), "Fractal of the day", date=date, src=fractal_src)
+    return fractal_page(
+        _daily_fractal(date),
+        "Fractal of the day",
+        date=date,
+        seed=seed_for_date(date)
+    )
 
 
 @app.route('/df/latest')
@@ -44,8 +51,7 @@ def latest():
 @app.route('/random')
 def random():
     seed = hex(_random.randint(0, 16 ** 6 - 1))[2:]
-    src = ensure_seed_exists(seed, small=False)
-    return fractal_page(random_fractal(seed=seed), "Random Fractal", src, f"Seed - {seed}")
+    return fractal_page(random_fractal(seed=seed), "Random Fractal", seed, f"Seed - {seed}")
 
 
 @app.route("/brouse")
@@ -58,8 +64,6 @@ def brouse():
     first = datetime.today() - fracs_per_page * page * one_day
 
     days = [first - i * one_day for i in range(fracs_per_page)]
-    for day in days:
-        ensure_daily_exists(day)
     return render_template("brouse.html", days=days, title="Browse", page=page)
 
 
@@ -68,5 +72,39 @@ def about():
     return render_template("about.html", title="About")
 
 
+@app.route("/img/<seed>.png")
+def img(seed):
+    size = request.args.get("size", default=200, type=int)
+
+    logging.info("input %s", size)
+    # Find a the next size that we provide that is bigger
+    new = 1280
+    for s in (1280, 640, 200):
+        if size <= s:
+            new = s
+        else:
+            break
+    size = new
+
+    logging.info("output %s", size)
+
+    path = path_for_seed(seed, size)
+
+    # Make sure the directory exists
+    path.parent.mkdir(exist_ok=True)
+
+    if not path.exists():
+        size = size, size * 9 // 16
+        fractal = random_fractal(size, seed=seed)
+        logging.info("Rendering %s, size=%s", path, size)
+        fractal.render(True).save(path)
+
+    logging.info("Loading %s, size=%s", path, size)
+
+    return send_from_directory(path.parent, path.name)
+
+
+logging.basicConfig(level=logging.INFO)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)

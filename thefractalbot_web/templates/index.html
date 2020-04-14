@@ -1,8 +1,11 @@
 {% extends "layouts/base.html" %}
+{% from "macros/macros.html" import fractal %}
+
 {% block body %}
     <div class="container">
 
-        <img src="{{ url_for("static", filename=fractal_src) }}" alt="The Fractal" class="fractal">
+        {{ fractal(seed, True, "fractal") }}
+
         <aside>
             <div>
                 <nav class="navbar">
