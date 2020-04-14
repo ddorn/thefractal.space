@@ -11,9 +11,139 @@
                    placeholder="Enter a seed..."
                    class="generate_input">
         </form>
-        <div class="container--overlay">
-            {{ fractal("diego", class="generate__fractal", img_class="gen__img") }}
-            <div class="overlay"></div>
-        </div>
     </section>
+
+    <script async defer>
+
+    const size = 40
+    const FPS = 30
+    let bubbles = []
+
+    const px = int => `${int}px`
+    const dot = (x1, y1, x2, y2) => x1*x2+y1*y2
+    const norm2 = (x, y) => x**2 + y**2
+
+    const create = (size) => {
+        const x = Math.random() * (window.innerWidth - size) + size / 2
+        const y = Math.random() * (window.innerHeight - size) + size / 2
+        const angle = Math.random() * 2 * Math.PI
+        const norm = Math.random() * 40 + 100
+        const vx = Math.cos(angle) * norm
+        const vy = Math.sin(angle) * norm
+
+        let bubble = document.createElement("div")
+        const img_id = Math.floor(Math.random() * 100)
+        console.log(img_id)
+        bubble.innerHTML = `
+            <div class="container--overlay">
+                {{ fractal("${img_id}", class="generate__fractal", img_class="gen__img") }}
+                <div class="overlay"></div>
+            </div>
+        `
+        bubble.classList.add("bubble")
+        bubble.style.top = px(y - size / 2)
+        bubble.style.left = px(x - size / 2)
+        bubble.style.width = px(size)
+        bubble.style.height = px(size)
+
+        document.body.appendChild(bubble)
+
+        bubbles.push({
+            x,
+            y,
+            vx,
+            vy,
+            size,
+            hs: size / 2,
+            mass: size * size,
+            el: bubble
+        })
+    }
+
+    for (let i = 0; i < 40; i++) {
+        create(size)
+    }
+
+    console.log(bubbles)
+
+    const collideBorders = (bubble) => {
+            const hs = bubble.hs
+
+            if (bubble.x - hs <= 0) {
+                bubble.x = hs
+                bubble.vx = -bubble.vx
+            } else if (bubble.x + hs >= window.innerWidth ) {
+                bubble.x = window.innerWidth - hs
+                bubble.vx = -bubble.vx
+            }
+
+            if (bubble.y - hs <= 0) {
+                bubble.y = hs
+                bubble.vy = -bubble.vy
+            } else if (bubble.y + hs >= window.innerHeight ) {
+                bubble.y = window.innerHeight - hs
+                bubble.vy = -bubble.vy
+            }
+    }
+    const collideBubbles = (b1, b2) => {
+        dx = b2.x - b1.x
+        dy = b2.y - b1.y
+        const dist2 = norm2(dx, dy)
+        if (dist2 >= (b1.hs + b2.hs)**2) {
+            // No collisions
+            return
+        }
+
+        // From https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
+        const coef = 2.0 / (b1.mass + b2.mass)
+        const axial = -dot(b1.vx - b2.vx, b1.vy - b2.vy, dx, dy)
+        const coef_tot = coef * axial / dist2
+        b1.vx = b1.vx - b2.mass * coef_tot * -dx
+        b1.vy = b1.vy - b2.mass * coef_tot * -dy
+        b2.vx = b2.vx - b1.mass * coef_tot * dx
+        b2.vy = b2.vy - b1.mass * coef_tot * dy
+
+
+        // p1 = p2 + (r1+r2)*D
+        const dist = Math.sqrt(dist2)
+        b1.x = b2.x - (b1.hs + b2.hs) * dx / dist
+        b1.y = b2.y - (b1.hs + b2.hs) * dy / dist
+
+
+        {#dist = Math.sqrt(dist2)#}
+        {#b2.x = b1.x + dx / dist * (b1.size + b2.size) / 2#}
+        {#b2.y = b1.y + dy / dist * (b1.size + b2.size) / 2#}
+    }
+
+    let last = performance.now()
+    const update = (now) => {
+        bubbles.forEach(bubble => {
+            bubble.x += bubble.vx * (now - last) / 1000
+            bubble.y += bubble.vy * (now - last) / 1000
+        })
+
+        bubbles.forEach((bubble, idx1) => {
+
+            collideBorders(bubble)
+            bubbles.forEach((b2, idx2) => {
+                if (idx2 > idx1) {
+                    collideBubbles(bubble, b2)
+                }
+            })
+        })
+
+        bubbles.forEach(bubble => {
+            bubble.el.style.top = px(bubble.y - bubble.hs)
+            bubble.el.style.left = px(bubble.x - bubble.hs)
+        })
+
+        last = now
+        requestAnimationFrame(update)
+    }
+
+
+    requestAnimationFrame(update)
+
+    </script>
+
 {% endblock %}
