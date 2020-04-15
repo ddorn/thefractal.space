@@ -23,10 +23,10 @@
 
 {% macro navbar() %}
     <nav class="navbar">
-        <a href="{{ url_for("latest") }}">Latest</a>
-        <a href="{{ url_for("brouse") }}">Brouse</a>
-        <a href="{{ url_for("random") }}">Random</a>
-        <a href="{{ url_for("generate") }}">Generate</a>
-        <a href="{{ url_for("about") }}">About</a>
+        <a href="{{ url_for("latest") }}" class="hitbox">Latest</a>
+        <a href="{{ url_for("brouse") }}" class="hitbox">Brouse</a>
+        <a href="{{ url_for("random") }}" class="hitbox">Random</a>
+        <a href="{{ url_for("generate") }}" class="hitbox">Generate</a>
+        <a href="{{ url_for("about") }}" class="hitbox">About</a>
     </nav>
 {% endmacro %}
