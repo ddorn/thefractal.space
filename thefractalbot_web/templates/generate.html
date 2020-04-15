@@ -3,25 +3,27 @@
 
 {% block content %}
     <section class="generate">
-        <h1 class="generate__title">{{ title }}</h1>
+        <h1 class="generate__title hitbox">{{ title }}</h1>
         <form action="{{ url_for("generate") }}" method="get">
 
             <input aria-label="Fractal Seed"
                    name="seed" type="text"
                    placeholder="Enter a seed..."
-                   class="generate_input">
+                   class="generate_input hitbox">
         </form>
     </section>
 
     <script async defer>
 
-    const size = 40
+    const size = 50
+    const nb = 30;
     const FPS = 30
     let bubbles = []
 
     const px = int => `${int}px`
     const dot = (x1, y1, x2, y2) => x1*x2+y1*y2
     const norm2 = (x, y) => x**2 + y**2
+    const clamp = (x, min, max) => x < min ? min : x > max ? max : x
 
     const create = (size) => {
         const x = Math.random() * (window.innerWidth - size) + size / 2
@@ -33,7 +35,6 @@
 
         let bubble = document.createElement("div")
         const img_id = Math.floor(Math.random() * 100)
-        console.log(img_id)
         bubble.innerHTML = `
             <div class="container--overlay">
                 {{ fractal("${img_id}", class="generate__fractal", img_class="gen__img") }}
@@ -60,11 +61,28 @@
         })
     }
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < nb; i++) {
         create(size)
     }
 
-    console.log(bubbles)
+    // Find rects of all .hitbox elements
+    let hitboxes = []
+    const hitboxes_buffer = document.querySelectorAll(".hitbox");
+    const find_hitboxes = () => {
+        hitboxes = []
+        hitboxes_buffer.forEach(h => {
+            let r = h.getBoundingClientRect()
+            hitboxes.push({
+                x: r.left,
+                y: r.top,
+                w: r.width,
+                h: r.height
+            })
+        })
+        console.log(hitboxes)
+    }
+    window.onresize = find_hitboxes
+    find_hitboxes()
 
     const collideBorders = (bubble) => {
             const hs = bubble.hs
@@ -114,16 +132,56 @@
         {#b2.x = b1.x + dx / dist * (b1.size + b2.size) / 2#}
         {#b2.y = b1.y + dy / dist * (b1.size + b2.size) / 2#}
     }
+    const collideHitboxes = (bubble, hitbox, vertical) => {
+        // Find the closest point to the circle within the rectangle
+        const closestX = clamp(bubble.x, hitbox.x, hitbox.x + hitbox.w)
+        const closestY = clamp(bubble.y, hitbox.y, hitbox.y + hitbox.h)
+
+        // Calculate the distance between the circle's center and this closest point
+        const dx = bubble.x - closestX
+        const dy = bubble.y - closestY
+
+        // If the distance is less than the circle's radius, an intersection occurs
+        distanceSquared = norm2(dx, dy)
+        if (distanceSquared >= (bubble.hs * bubble.hs)) {
+            return
+        }
+    
+        if (vertical) {
+            if (bubble.vy > 0) {
+                bubble.y = hitbox.y - bubble.hs
+            } else {
+                bubble.y = hitbox.y + hitbox.h + bubble.hs
+            }
+            bubble.vy = -bubble.vy
+        } else {
+            if (bubble.vx > 0) {
+                bubble.x = hitbox.x - bubble.hs
+            } else {
+                bubble.x = hitbox.x + hitbox.w + bubble.hs
+            }
+            bubble.vx = -bubble.vx
+        }
+    }
 
     let last = performance.now()
     const update = (now) => {
         bubbles.forEach(bubble => {
             bubble.x += bubble.vx * (now - last) / 1000
+                
+            hitboxes.forEach(hitbox => {
+                collideHitboxes(bubble, hitbox, false)
+            })
+        })
+        bubbles.forEach(bubble => {
             bubble.y += bubble.vy * (now - last) / 1000
+    
+            hitboxes.forEach(hitbox => {
+                collideHitboxes(bubble, hitbox, true)
+            })
         })
 
         bubbles.forEach((bubble, idx1) => {
-
             collideBorders(bubble)
             bubbles.forEach((b2, idx2) => {
                 if (idx2 > idx1) {
