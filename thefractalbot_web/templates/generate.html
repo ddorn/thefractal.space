@@ -15,12 +15,14 @@
 
     <script async defer>
 
+    'use strict';
+
     const size = 50
     const nb = 30;
     const FPS = 30
     let bubbles = []
 
-    const px = int => `${int}px`
+    const px = int => `${int | 0}px`
     const dot = (x1, y1, x2, y2) => x1*x2+y1*y2
     const norm2 = (x, y) => x**2 + y**2
     const clamp = (x, min, max) => x < min ? min : x > max ? max : x
@@ -34,7 +36,7 @@
         const vy = Math.sin(angle) * norm
 
         let bubble = document.createElement("div")
-        const img_id = Math.floor(Math.random() * 100)
+        const img_id = Math.floor(Math.random() * 1000)
         bubble.innerHTML = `
             <div class="container--overlay">
                 {{ fractal("${img_id}", class="generate__fractal", img_class="gen__img") }}
@@ -104,8 +106,8 @@
             }
     }
     const collideBubbles = (b1, b2) => {
-        dx = b2.x - b1.x
-        dy = b2.y - b1.y
+        const dx = b2.x - b1.x
+        const dy = b2.y - b1.y
         const dist2 = norm2(dx, dy)
         if (dist2 >= (b1.hs + b2.hs)**2) {
             // No collisions
@@ -142,7 +144,7 @@
         const dy = bubble.y - closestY
 
         // If the distance is less than the circle's radius, an intersection occurs
-        distanceSquared = norm2(dx, dy)
+        const distanceSquared = norm2(dx, dy)
         if (distanceSquared >= (bubble.hs * bubble.hs)) {
             return
         }
