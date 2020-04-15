@@ -14,26 +14,213 @@
     </section>
 
     <script async defer>
-
     'use strict';
 
-    const size = 50
-    const nb = 30;
+    class Vec2 {
+        constructor(x, y) {
+            this.x = x
+            this.y = y
+        }
+
+        static fromPolar(angle, norm) {
+            return new Vec2(Math.cos(angle) * norm, Math.sin(angle) * norm)
+        }
+
+        add(other) {
+            return new Vec2(this.x + other.x, this.y + other.y)
+        }
+        radd(other) {
+            this.x += other.x
+            this.y += other.y
+            return this
+        }
+        mult(scalar) {
+            return new Vec2(this.x * scalar, this.y * scalar)
+        }
+        dividedBy(scalar) {
+            return new Vec2(this.x / scalar, this.y / scalar)
+        }
+        to(other) {
+            return new Vec2(other.x - this.x, other.y - this.y)
+        }
+
+        dot(other) {
+            return this.x * other.x + this.y * other.y
+        }
+        norm2() {
+            return this.x * this.x + this.y * this.y
+        }
+
+        toString() {
+            return `Vec2(${this.x}, ${this.y})`
+        }
+    }
+
+    class Bubble {
+        /**
+         * A Fancy bubble.
+         *
+         * @param {Vec2} pos
+         * @param {Vec2} vel
+         * @param {int} radius
+         * @param {Element} el
+         */
+        constructor(pos, vel, radius, el) {
+            this.pos = pos;
+            this.vel = vel;
+            this.radius = radius;
+            this.el = el;
+            this.inv_mass = 1 / (radius * radius)
+        }
+        collideBorders() {
+
+            if (this.pos.x - this.radius <= 0) {
+                this.pos.x = this.radius
+                this.vel.x = -this.vel.x
+            } else if (this.pos.x + this.radius >= window.innerWidth ) {
+                this.pos.x = window.innerWidth - this.radius
+                this.vel.x = -this.vel.x
+            }
+
+            if (this.pos.y - this.radius <= 0) {
+                this.pos.y = this.radius
+                this.vel.y = -this.vel.y
+            } else if (this.pos.y + this.radius >= window.innerHeight ) {
+                this.pos.y = window.innerHeight - this.radius
+                this.vel.y = -this.vel.y
+            }
+        }
+        collideBubble(other) {
+            let dist = this.pos.to(other.pos)
+            const dist2 = dist.norm2()
+            if (dist2 >= (this.radius + other.radius)**2) {
+                // No collisions
+                return
+            }
+
+            const d = Math.sqrt(dist2)
+            let normal, penetration
+            if (dist2 !== 0.0) {
+                penetration = this.radius + other.radius - d
+                normal = dist.dividedBy(d)
+            } else {
+                penetration = this.radius
+                normal = new Vec2(0, 1)
+            }
+
+            return new Collision(this, other, normal, penetration)
+
+/*
+            // From https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
+            const coef = 2.0 / (b1.mass + b2.mass)
+            const axial = velRelative.dot(dist)
+            const coef_tot = coef * axial / dist2
+            b1.vx = b1.vx - b2.mass * coef_tot * -dx
+            b1.vy = b1.vy - b2.mass * coef_tot * -dy
+            b2.vx = b2.vx - b1.mass * coef_tot * dx
+            b2.vy = b2.vy - b1.mass * coef_tot * dy
+
+
+            // p1 = p2 + (r1+r2)*D
+            const dist = Math.sqrt(dist2)
+            b1.x = b2.x - (b1.hs + b2.hs) * dx / dist
+            b1.y = b2.y - (b1.hs + b2.hs) * dy / dist
+ */
+
+
+            {#dist = Math.sqrt(dist2)#}
+            {#b2.x = b1.x + dx / dist * (b1.size + b2.size) / 2#}
+            {#b2.y = b1.y + dy / dist * (b1.size + b2.size) / 2#}
+
+        }
+        collideRect(rect) {
+            return;
+            // Find the closest point to the circle within the rectangle
+            const closestX = clamp(bubble.pos.x, hitbox.x, hitbox.x + hitbox.w)
+            const closestY = clamp(bubble.pos.y, hitbox.y, hitbox.y + hitbox.h)
+
+            // Calculate the distance between the circle's center and this closest point
+            const dx = bubble.x - closestX
+            const dy = bubble.y - closestY
+
+            // If the distance is less than the circle's radius, an intersection occurs
+            const distanceSquared = norm2(dx, dy)
+            if (distanceSquared >= (bubble.hs * bubble.hs)) {
+                return
+            }
+
+            if (vertical) {
+                if (bubble.vy > 0) {
+                    bubble.y = hitbox.y - bubble.hs
+                } else {
+                    bubble.y = hitbox.y + hitbox.h + bubble.hs
+                }
+                bubble.vy = -bubble.vy
+            } else {
+                if (bubble.vx > 0) {
+                    bubble.x = hitbox.x - bubble.hs
+                } else {
+                    bubble.x = hitbox.x + hitbox.w + bubble.hs
+                }
+                bubble.vx = -bubble.vx
+            }
+        }
+    }
+
+    class Rect {
+        /**
+         * An AABB.
+         * @param min
+         * @param max
+         */
+        constructor(min, max) {
+            this.min = min
+            this.max = max
+            this.inv_mass = 0
+            this.vel = new Vec2(0, 0)
+        }
+    }
+
+    class Collision {
+        constructor(objA, objB, normal, penetration) {
+            this.objA = objA;
+            this.objB = objB;
+            this.normal = normal;
+            this.penetration = penetration;
+        }
+        resolve() {
+            const velRelative = this.objA.vel.to(this.objB.vel)
+            const velAlongNormal = velRelative.dot(this.normal)
+
+            if (velAlongNormal > 0) {
+                return
+            }
+
+            const j = -2 * velAlongNormal / (this.objA.inv_mass + this.objB.inv_mass)
+            const impulse = this.normal.mult(j)
+            this.objA.vel.radd(impulse.mult(-this.objA.inv_mass))
+            this.objB.vel.radd(impulse.mult(this.objB.inv_mass))
+        }
+    }
+
+    const radius = 25
+    const nb = 30
     const FPS = 30
     let bubbles = []
 
     const px = int => `${int | 0}px`
-    const dot = (x1, y1, x2, y2) => x1*x2+y1*y2
-    const norm2 = (x, y) => x**2 + y**2
     const clamp = (x, min, max) => x < min ? min : x > max ? max : x
+    const randRange = (min, max) => Math.random() * (max - min) + min
 
-    const create = (size) => {
-        const x = Math.random() * (window.innerWidth - size) + size / 2
-        const y = Math.random() * (window.innerHeight - size) + size / 2
-        const angle = Math.random() * 2 * Math.PI
-        const norm = Math.random() * 40 + 100
-        const vx = Math.cos(angle) * norm
-        const vy = Math.sin(angle) * norm
+    const create = (radius) => {
+        let pos = new Vec2(
+            randRange(radius, window.innerWidth - radius),
+            randRange(radius, window.innerHeight - radius)
+        )
+        let vel = Vec2.fromPolar(
+            Math.random() * 2 * Math.PI,
+            randRange(60, 140)
+        )
 
         let bubble = document.createElement("div")
         const img_id = Math.floor(Math.random() * 1000)
@@ -44,165 +231,79 @@
             </div>
         `
         bubble.classList.add("bubble")
-        bubble.style.top = px(y - size / 2)
-        bubble.style.left = px(x - size / 2)
-        bubble.style.width = px(size)
-        bubble.style.height = px(size)
+        bubble.style.top = px(pos.y - radius)
+        bubble.style.left = px(pos.x - radius)
+        bubble.style.width = px(radius * 2)
+        bubble.style.height = px(radius * 2)
 
         document.body.appendChild(bubble)
 
-        bubbles.push({
-            x,
-            y,
-            vx,
-            vy,
-            size,
-            hs: size / 2,
-            mass: size * size,
-            el: bubble
-        })
+        bubbles.push(new Bubble(pos, vel, radius, bubble))
     }
 
+    let last = performance.now()
+    const update_better = (now) => {
+        for (const bubble of bubbles) {
+            if (bubble.pos.x != bubble.pos.x) { debugger; return }
+            bubble.pos = bubble.pos.add(bubble.vel.mult((now - last) / 1000))
+            bubble.collideBorders()
+        }
+
+        let collisions = []
+        bubbles.forEach((b1, idx1) => {
+            bubbles.forEach((b2, idx2) => {
+                if (idx2 > idx1) {
+                    const col = b1.collideBubble(b2)
+                    if (col) {
+                        collisions.push(col)
+                    }
+                }
+            })
+
+            hitboxes.forEach(hitbox => {
+                const col = b1.collideRect(hitbox)
+                if (col) {
+                    collisions.push(col)
+                }
+            })
+        })
+        collisions.forEach(col => col.resolve())
+
+        bubbles.forEach(bubble => {
+            bubble.el.style.top = px(bubble.pos.y - bubble.radius)
+            bubble.el.style.left = px(bubble.pos.x - bubble.radius)
+        })
+
+        last = now
+        requestAnimationFrame(update_better)
+    }
+
+
+
     for (let i = 0; i < nb; i++) {
-        create(size)
+        create(radius)
     }
 
     // Find rects of all .hitbox elements
     let hitboxes = []
-    const hitboxes_buffer = document.querySelectorAll(".hitbox");
     const find_hitboxes = () => {
         hitboxes = []
-        hitboxes_buffer.forEach(h => {
-            let r = h.getBoundingClientRect()
-            hitboxes.push({
-                x: r.left,
-                y: r.top,
-                w: r.width,
-                h: r.height
+        document
+            .querySelectorAll(".hitbox")
+            .forEach(h => {
+                let r = h.getBoundingClientRect()
+                hitboxes.push({
+                    x: r.left,
+                    y: r.top,
+                    w: r.width,
+                    h: r.height
+                })
             })
-        })
-        console.log(hitboxes)
     }
-    window.onresize = find_hitboxes
+    window.addEventListener("resize", find_hitboxes)
     find_hitboxes()
 
-    const collideBorders = (bubble) => {
-            const hs = bubble.hs
-
-            if (bubble.x - hs <= 0) {
-                bubble.x = hs
-                bubble.vx = -bubble.vx
-            } else if (bubble.x + hs >= window.innerWidth ) {
-                bubble.x = window.innerWidth - hs
-                bubble.vx = -bubble.vx
-            }
-
-            if (bubble.y - hs <= 0) {
-                bubble.y = hs
-                bubble.vy = -bubble.vy
-            } else if (bubble.y + hs >= window.innerHeight ) {
-                bubble.y = window.innerHeight - hs
-                bubble.vy = -bubble.vy
-            }
-    }
-    const collideBubbles = (b1, b2) => {
-        const dx = b2.x - b1.x
-        const dy = b2.y - b1.y
-        const dist2 = norm2(dx, dy)
-        if (dist2 >= (b1.hs + b2.hs)**2) {
-            // No collisions
-            return
-        }
-
-        // From https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
-        const coef = 2.0 / (b1.mass + b2.mass)
-        const axial = -dot(b1.vx - b2.vx, b1.vy - b2.vy, dx, dy)
-        const coef_tot = coef * axial / dist2
-        b1.vx = b1.vx - b2.mass * coef_tot * -dx
-        b1.vy = b1.vy - b2.mass * coef_tot * -dy
-        b2.vx = b2.vx - b1.mass * coef_tot * dx
-        b2.vy = b2.vy - b1.mass * coef_tot * dy
-
-
-        // p1 = p2 + (r1+r2)*D
-        const dist = Math.sqrt(dist2)
-        b1.x = b2.x - (b1.hs + b2.hs) * dx / dist
-        b1.y = b2.y - (b1.hs + b2.hs) * dy / dist
-
-
-        {#dist = Math.sqrt(dist2)#}
-        {#b2.x = b1.x + dx / dist * (b1.size + b2.size) / 2#}
-        {#b2.y = b1.y + dy / dist * (b1.size + b2.size) / 2#}
-    }
-    const collideHitboxes = (bubble, hitbox, vertical) => {
-        // Find the closest point to the circle within the rectangle
-        const closestX = clamp(bubble.x, hitbox.x, hitbox.x + hitbox.w)
-        const closestY = clamp(bubble.y, hitbox.y, hitbox.y + hitbox.h)
-
-        // Calculate the distance between the circle's center and this closest point
-        const dx = bubble.x - closestX
-        const dy = bubble.y - closestY
-
-        // If the distance is less than the circle's radius, an intersection occurs
-        const distanceSquared = norm2(dx, dy)
-        if (distanceSquared >= (bubble.hs * bubble.hs)) {
-            return
-        }
-    
-        if (vertical) {
-            if (bubble.vy > 0) {
-                bubble.y = hitbox.y - bubble.hs
-            } else {
-                bubble.y = hitbox.y + hitbox.h + bubble.hs
-            }
-            bubble.vy = -bubble.vy
-        } else {
-            if (bubble.vx > 0) {
-                bubble.x = hitbox.x - bubble.hs
-            } else {
-                bubble.x = hitbox.x + hitbox.w + bubble.hs
-            }
-            bubble.vx = -bubble.vx
-        }
-    }
-
-    let last = performance.now()
-    const update = (now) => {
-        bubbles.forEach(bubble => {
-            bubble.x += bubble.vx * (now - last) / 1000
-                
-            hitboxes.forEach(hitbox => {
-                collideHitboxes(bubble, hitbox, false)
-            })
-        })
-        bubbles.forEach(bubble => {
-            bubble.y += bubble.vy * (now - last) / 1000
-    
-            hitboxes.forEach(hitbox => {
-                collideHitboxes(bubble, hitbox, true)
-            })
-        })
-
-        bubbles.forEach((bubble, idx1) => {
-            collideBorders(bubble)
-            bubbles.forEach((b2, idx2) => {
-                if (idx2 > idx1) {
-                    collideBubbles(bubble, b2)
-                }
-            })
-        })
-
-        bubbles.forEach(bubble => {
-            bubble.el.style.top = px(bubble.y - bubble.hs)
-            bubble.el.style.left = px(bubble.x - bubble.hs)
-        })
-
-        last = now
-        requestAnimationFrame(update)
-    }
-
-
-    requestAnimationFrame(update)
+    requestAnimationFrame(update_better)
 
     </script>
 
