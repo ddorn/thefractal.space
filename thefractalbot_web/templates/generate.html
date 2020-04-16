@@ -50,6 +50,12 @@
         norm2() {
             return this.x * this.x + this.y * this.y
         }
+        norm() {
+            return Math.sqrt(this.norm2())
+        }
+        eq(other) {
+            return this.x === other.x && this.y === other.y
+        }
 
         toString() {
             return `Vec2(${this.x}, ${this.y})`
@@ -134,35 +140,50 @@
 
         }
         collideRect(rect) {
-            return;
             // Find the closest point to the circle within the rectangle
-            const closestX = clamp(bubble.pos.x, hitbox.x, hitbox.x + hitbox.w)
-            const closestY = clamp(bubble.pos.y, hitbox.y, hitbox.y + hitbox.h)
+            const closest = new Vec2(
+                clamp(this.pos.x, rect.min.x, rect.max.x),
+                clamp(this.pos.y, rect.min.y, rect.max.y)
+            )
 
             // Calculate the distance between the circle's center and this closest point
-            const dx = bubble.x - closestX
-            const dy = bubble.y - closestY
+            let d = closest.to(this.pos)
 
             // If the distance is less than the circle's radius, an intersection occurs
-            const distanceSquared = norm2(dx, dy)
-            if (distanceSquared >= (bubble.hs * bubble.hs)) {
+            const norm2 = d.norm2()
+            if (norm2 >= (this.radius * this.radius)) {
                 return
             }
 
-            if (vertical) {
-                if (bubble.vy > 0) {
-                    bubble.y = hitbox.y - bubble.hs
-                } else {
-                    bubble.y = hitbox.y + hitbox.h + bubble.hs
+            const norm = Math.sqrt(norm2)
+
+            if (closest.eq(this.pos)) {
+                console.log(this, rect)
+                // Circle is inside the AABB, so we need to clamp the circle's center
+                // to the closest edge
+
+                const left = this.pos.x - rect.min.x
+                const top = this.pos.y - rect.min.y
+                const right = rect.max.x - this.pos.x
+                const bottom = rect.max.y - this.pos.y
+
+                const mini = Math.min(left, top, right, bottom)
+                if (mini === left) {
+                    closest.x = rect.min.x
+                } else if (mini === right) {
+                    closest.x = rect.max.x
+                } else if (mini === top) {
+                    closest.y = rect.min.y
+                } else if (mini === bottom) {
+                    closest.y = rect.max.y
                 }
-                bubble.vy = -bubble.vy
+
+                const normal = this.pos.to(closest)
+
+                const n = normal.norm();
+                return new Collision(this, rect, normal.dividedBy(-n), this.radius - n)
             } else {
-                if (bubble.vx > 0) {
-                    bubble.x = hitbox.x - bubble.hs
-                } else {
-                    bubble.x = hitbox.x + hitbox.w + bubble.hs
-                }
-                bubble.vx = -bubble.vx
+                return new Collision(this, rect, d.dividedBy(-norm), this.radius - norm);
             }
         }
     }
@@ -204,7 +225,7 @@
     }
 
     const radius = 25
-    const nb = 30
+    const nb = 20
     const FPS = 30
     let bubbles = []
 
@@ -244,7 +265,6 @@
     let last = performance.now()
     const update_better = (now) => {
         for (const bubble of bubbles) {
-            if (bubble.pos.x != bubble.pos.x) { debugger; return }
             bubble.pos = bubble.pos.add(bubble.vel.mult((now - last) / 1000))
             bubble.collideBorders()
         }
@@ -267,12 +287,25 @@
                 }
             })
         })
-        collisions.forEach(col => col.resolve())
+        collisions.forEach(col => {
+            col.resolve()
+        })
+
+
+        for (const b of bubbles) {
+            if (b.pos.x != b.pos.x) {
+                console.log(b)
+                debugger;
+                return
+            }
+        }
 
         bubbles.forEach(bubble => {
             bubble.el.style.top = px(bubble.pos.y - bubble.radius)
             bubble.el.style.left = px(bubble.pos.x - bubble.radius)
         })
+
+
 
         last = now
         requestAnimationFrame(update_better)
@@ -292,12 +325,10 @@
             .querySelectorAll(".hitbox")
             .forEach(h => {
                 let r = h.getBoundingClientRect()
-                hitboxes.push({
-                    x: r.left,
-                    y: r.top,
-                    w: r.width,
-                    h: r.height
-                })
+                hitboxes.push(new Rect(
+                    new Vec2(r.left, r.top),
+                    new Vec2(r.left + r.width, r.top + r.height)
+                ))
             })
     }
     window.addEventListener("resize", find_hitboxes)
