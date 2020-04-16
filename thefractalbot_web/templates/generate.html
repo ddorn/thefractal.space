@@ -225,20 +225,20 @@
     }
 
     const radius = 25
-    const nb = 20
-    const FPS = 30
+    const nb = 40
     let bubbles = []
 
     const px = int => `${int | 0}px`
     const clamp = (x, min, max) => x < min ? min : x > max ? max : x
     const randRange = (min, max) => Math.random() * (max - min) + min
 
-    const create = (radius) => {
-        let pos = new Vec2(
+    const create = () => {
+        const radius = randRange(15, 35)
+        const pos = new Vec2(
             randRange(radius, window.innerWidth - radius),
             randRange(radius, window.innerHeight - radius)
         )
-        let vel = Vec2.fromPolar(
+        const vel = Vec2.fromPolar(
             Math.random() * 2 * Math.PI,
             randRange(60, 140)
         )
@@ -314,7 +314,7 @@
 
 
     for (let i = 0; i < nb; i++) {
-        create(radius)
+        create()
     }
 
     // Find rects of all .hitbox elements
