@@ -79,20 +79,15 @@
             this.inv_mass = 1 / (radius * radius)
         }
         collideBorders() {
-
-            if (this.pos.x - this.radius <= 0) {
-                this.pos.x = this.radius
+            if (this.pos.x - this.radius <= 0 && this.vel.x < 0) {
                 this.vel.x = -this.vel.x
-            } else if (this.pos.x + this.radius >= window.innerWidth ) {
-                this.pos.x = window.innerWidth - this.radius
+            } else if (this.pos.x + this.radius >= window.innerWidth && this.vel.x > 0 ) {
                 this.vel.x = -this.vel.x
             }
 
-            if (this.pos.y - this.radius <= 0) {
-                this.pos.y = this.radius
+            if (this.pos.y - this.radius <= 0 && this.vel.y < 0) {
                 this.vel.y = -this.vel.y
-            } else if (this.pos.y + this.radius >= window.innerHeight ) {
-                this.pos.y = window.innerHeight - this.radius
+            } else if (this.pos.y + this.radius >= window.innerHeight && this.vel.y > 0) {
                 this.vel.y = -this.vel.y
             }
         }
@@ -115,29 +110,6 @@
             }
 
             return new Collision(this, other, normal, penetration)
-
-/*
-            // From https://en.wikipedia.org/wiki/Elastic_collision#Two-dimensional_collision_with_two_moving_objects
-            const coef = 2.0 / (b1.mass + b2.mass)
-            const axial = velRelative.dot(dist)
-            const coef_tot = coef * axial / dist2
-            b1.vx = b1.vx - b2.mass * coef_tot * -dx
-            b1.vy = b1.vy - b2.mass * coef_tot * -dy
-            b2.vx = b2.vx - b1.mass * coef_tot * dx
-            b2.vy = b2.vy - b1.mass * coef_tot * dy
-
-
-            // p1 = p2 + (r1+r2)*D
-            const dist = Math.sqrt(dist2)
-            b1.x = b2.x - (b1.hs + b2.hs) * dx / dist
-            b1.y = b2.y - (b1.hs + b2.hs) * dy / dist
- */
-
-
-            {#dist = Math.sqrt(dist2)#}
-            {#b2.x = b1.x + dx / dist * (b1.size + b2.size) / 2#}
-            {#b2.y = b1.y + dy / dist * (b1.size + b2.size) / 2#}
-
         }
         collideRect(rect) {
             // Find the closest point to the circle within the rectangle
@@ -225,22 +197,22 @@
     }
 
     const radius = 25
-    const nb = 40
+    let nb = 40
     let bubbles = []
 
     const px = int => `${int | 0}px`
     const clamp = (x, min, max) => x < min ? min : x > max ? max : x
     const randRange = (min, max) => Math.random() * (max - min) + min
 
-    const create = () => {
+    const create = (left) => {
         const radius = randRange(15, 35)
         const pos = new Vec2(
-            randRange(radius, window.innerWidth - radius),
-            randRange(radius, window.innerHeight - radius)
+            left ? -radius -10 : window.innerWidth + radius + 10,
+            window.innerHeight + radius + 10
         )
         const vel = Vec2.fromPolar(
-            Math.random() * 2 * Math.PI,
-            randRange(60, 140)
+            randRange(1/6, 2/6) * Math.PI,
+            randRange(90, 140)
         )
 
         let bubble = document.createElement("div")
@@ -262,10 +234,23 @@
         bubbles.push(new Bubble(pos, vel, radius, bubble))
     }
 
+    const spawn = () => {
+
+        if (nb <= 0) {
+            clearInterval(i)
+        } else {
+            create(true)
+            create(false)
+            --nb
+            --nb
+        }
+    }
+    const i = setInterval(spawn, 1000)
+
     let last = performance.now()
     const update_better = (now) => {
         for (const bubble of bubbles) {
-            bubble.pos = bubble.pos.add(bubble.vel.mult((now - last) / 1000))
+            bubble.pos = bubble.pos.add(bubble.vel.mult(Math.min(0.1, (now - last) / 1000)))
             bubble.collideBorders()
         }
 
@@ -309,12 +294,6 @@
 
         last = now
         requestAnimationFrame(update_better)
-    }
-
-
-
-    for (let i = 0; i < nb; i++) {
-        create()
     }
 
     // Find rects of all .hitbox elements
