@@ -1,3 +1,4 @@
 .idea/
 __pycache__/
-thefractalbot_web/static/df/
+thefractal.space/static/df/
+*.nix
