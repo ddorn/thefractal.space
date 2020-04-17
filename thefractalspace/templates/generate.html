@@ -3,7 +3,7 @@
 
 {% block content %}
     <section class="generate">
-        <h1 class="generate__title hitbox">{{ title }}</h1>
+        <h1 class="generate__title hitbox">The Fractal Space</h1>
         <form action="{{ url_for("generate") }}" method="get">
 
             <input aria-label="Fractal Seed"
@@ -11,9 +11,10 @@
                    placeholder="Enter a seed..."
                    class="generate_input hitbox">
         </form>
-        <canvas id="bubbles-canvas"></canvas>
-        <canvas id="hidden-canvas"></canvas>
     </section>
+
+    <canvas id="bubbles-canvas"></canvas>
+    <canvas id="hidden-canvas"></canvas>
 
     <script async defer>
     'use strict';
