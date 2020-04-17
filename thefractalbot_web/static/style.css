@@ -421,5 +421,19 @@ picture {
 }
 
 
+#bubbles-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -2;
+}
+
+#hidden-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    display: none;
+}
 .hitbox {
 }
