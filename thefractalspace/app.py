@@ -35,8 +35,8 @@ def fractal_page(fractal, title, seed, subtitle=None, date=None):
 
 
 @app.route('/')
-def hello_world():
-    return redirect(url_for("latest"))
+def home():
+    return generate()
 
 
 @app.route('/df/<date:date>')
@@ -84,7 +84,6 @@ def generate():
     if seed is None:
         return render_template("generate.html", title="Custom Fractal")
     return fractal_page(random_fractal(seed=seed), "Custom Fractal", seed, f"Seed: {seed}")
-
 
 
 @app.route("/img/<seed:seed>.png")
