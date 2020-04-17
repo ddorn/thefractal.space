@@ -128,6 +128,7 @@ body {
     display: flex;
     flex-direction: column;
     margin: 0 auto 2rem auto;
+    min-height: 100vh;
 }
 
 a {
@@ -304,21 +305,24 @@ aside {
 }
 
 .generate {
-    width: 60%;
     height: 100%;
-    margin: 0 auto;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     /*margin: 20% auto 0 auto;*/
-    text-align: center;
-}
-form {
-    margin-top: 2rem;
 }
 
 .generate__title {
-    margin-top: 20%;
     font-size: 5em;
     font-weight: bold;
+    width: max-content;
     line-height: 0.7em;
+}
+
+form {
+    width: 80%;
 }
 
 .generate_input {
@@ -326,7 +330,7 @@ form {
     width: 100%;
     border-radius: 1.5em;
     padding: 0.5em 1.5em;
-    margin-top: 2em;
+    margin: 4em 0;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.8);
     /*box-shadow: 3px 3px 5px 3px rgba(0, 0, 0, 0.8),*/
     /*            -3px -3px 5px 3px rgba(255, 255, 255, 0.4);*/
