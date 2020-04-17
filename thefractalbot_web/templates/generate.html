@@ -11,6 +11,8 @@
                    placeholder="Enter a seed..."
                    class="generate_input hitbox">
         </form>
+        <canvas id="bubbles-canvas"></canvas>
+        <canvas id="hidden-canvas"></canvas>
     </section>
 
     <script async defer>
@@ -69,14 +71,15 @@
          * @param {Vec2} pos
          * @param {Vec2} vel
          * @param {int} radius
-         * @param {Element} el
          */
-        constructor(pos, vel, radius, el) {
+        constructor(pos, vel, radius) {
             this.pos = pos;
             this.vel = vel;
             this.radius = radius;
-            this.el = el;
             this.inv_mass = 1 / (radius * radius)
+
+            this.img = null
+            this.setBubbleImage()
         }
         collideBorders() {
             if (this.pos.x - this.radius <= 0 && this.vel.x < 0) {
@@ -158,6 +161,37 @@
                 return new Collision(this, rect, d.dividedBy(-norm), this.radius - norm);
             }
         }
+
+        setBubbleImage() {
+            this.img = new Image()
+            this.img.addEventListener("load", () => {
+                console.log(1)
+                canvasHidden.width = 2 * this.radius
+                canvasHidden.height = 2 * this.radius
+                const grad = ctxHidden.createRadialGradient(
+                    this.radius, this.radius, this.radius/2,
+                    this.radius, this.radius, this.radius,
+                )
+                grad.addColorStop(0.8, "#fff")
+                grad.addColorStop(1.0, "rgba(255, 255, 255, 0)")
+                ctxHidden.save()
+                ctxHidden.fillStyle = grad
+                ctxHidden.fillRect(0, 0, canvasHidden.width, canvasHidden.height)
+                ctxHidden.globalCompositeOperation = "source-in"
+                const sh = this.img.height
+                const sx = (this.img.width - sh) / 2
+                ctxHidden.drawImage(this.img, sx, 0, sh, sh, 0, 0, this.radius * 2, this.radius * 2)
+                ctxHidden.restore()
+                this.img.src = canvasHidden.toDataURL("image/png")
+                console.log(this.img.src)
+            }, {once: true})
+            const seed = Math.floor(randRange(0, 1000))
+            this.img.src = `{{ url_for("img", size=200, seed="${seed}") }}`
+
+        }
+        render(ctx) {
+            ctx.drawImage(this.img, this.pos.x - this.radius, this.pos.y - this.radius)
+        }
     }
 
     class Rect {
@@ -196,11 +230,14 @@
         }
     }
 
-    const radius = 25
     let nb = 40
     let bubbles = []
+    let hitboxes = []
+    const canvasHidden = document.getElementById("hidden-canvas")
+    const ctxHidden = canvasHidden.getContext("2d")
+    const canvas = document.getElementById("bubbles-canvas")
+    const ctx = canvas.getContext("2d")
 
-    const px = int => `${int | 0}px`
     const clamp = (x, min, max) => x < min ? min : x > max ? max : x
     const randRange = (min, max) => Math.random() * (max - min) + min
 
@@ -215,27 +252,10 @@
             randRange(90, 140)
         )
 
-        let bubble = document.createElement("div")
-        const img_id = Math.floor(Math.random() * 1000)
-        bubble.innerHTML = `
-            <div class="container--overlay">
-                {{ fractal("${img_id}", class="generate__fractal", img_class="gen__img") }}
-                <div class="overlay"></div>
-            </div>
-        `
-        bubble.classList.add("bubble")
-        bubble.style.top = px(pos.y - radius)
-        bubble.style.left = px(pos.x - radius)
-        bubble.style.width = px(radius * 2)
-        bubble.style.height = px(radius * 2)
-
-        document.body.appendChild(bubble)
-
-        bubbles.push(new Bubble(pos, vel, radius, bubble))
+        bubbles.push(new Bubble(pos, vel, radius))
     }
 
     const spawn = () => {
-
         if (nb <= 0) {
             clearInterval(i)
         } else {
@@ -247,10 +267,28 @@
     }
     const i = setInterval(spawn, 1000)
 
-    let last = performance.now()
-    const update_better = (now) => {
-        for (const bubble of bubbles) {
-            bubble.pos = bubble.pos.add(bubble.vel.mult(Math.min(0.1, (now - last) / 1000)))
+    // Find rects of all .hitbox elements
+    const set_rects = () => {
+        hitboxes = []
+        document
+            .querySelectorAll(".hitbox")
+            .forEach(h => {
+                let r = h.getBoundingClientRect()
+                hitboxes.push(new Rect(
+                    new Vec2(r.left, r.top),
+                    new Vec2(r.left + r.width, r.top + r.height)
+                ))
+            })
+
+        canvas.width = window.innerWidth
+        canvas.height =  window.innerHeight
+    }
+    window.addEventListener("resize", set_rects)
+
+
+    const update = (dt) => {
+                for (const bubble of bubbles) {
+            bubble.pos = bubble.pos.add(bubble.vel.mult(dt))
             bubble.collideBorders()
         }
 
@@ -276,7 +314,6 @@
             col.resolve()
         })
 
-
         for (const b of bubbles) {
             if (b.pos.x != b.pos.x) {
                 console.log(b)
@@ -284,36 +321,26 @@
                 return
             }
         }
+    }
 
-        bubbles.forEach(bubble => {
-            bubble.el.style.top = px(bubble.pos.y - bubble.radius)
-            bubble.el.style.left = px(bubble.pos.x - bubble.radius)
-        })
+    const render = () => {
+        ctx.fillStyle = "rgba(0, 0, 0, 0)"
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        bubbles.forEach(bubble => bubble.render(ctx))
+    }
 
-
+    let last = performance.now()
+    const animation = (now) => {
+        const dt = Math.min(0.1, (now - last) / 1000)
+        update(dt)
+        render()
 
         last = now
-        requestAnimationFrame(update_better)
+        requestAnimationFrame(animation)
     }
 
-    // Find rects of all .hitbox elements
-    let hitboxes = []
-    const find_hitboxes = () => {
-        hitboxes = []
-        document
-            .querySelectorAll(".hitbox")
-            .forEach(h => {
-                let r = h.getBoundingClientRect()
-                hitboxes.push(new Rect(
-                    new Vec2(r.left, r.top),
-                    new Vec2(r.left + r.width, r.top + r.height)
-                ))
-            })
-    }
-    window.addEventListener("resize", find_hitboxes)
-    find_hitboxes()
-
-    requestAnimationFrame(update_better)
+    set_rects()
+    requestAnimationFrame(animation)
 
     </script>
 
