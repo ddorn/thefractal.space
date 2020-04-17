@@ -318,6 +318,7 @@ form {
     margin-top: 20%;
     font-size: 5em;
     font-weight: bold;
+    line-height: 0.7em;
 }
 
 .generate_input {
