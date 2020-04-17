@@ -1,3 +1,5 @@
+import logging
+import os
 import re
 from dataclasses import dataclass
 from datetime import datetime
@@ -9,6 +11,11 @@ from brocoli.fractal import Fractal
 from brocoli.processing.random_fractal import random_fractal
 from markupsafe import Markup
 from werkzeug.routing import BaseConverter, ValidationError
+
+
+FRACTALS_DIR = Path(os.environ.get("FRACTALS_DIR", Path(__file__).parent / "static" / "df"))
+
+logging.info(f"Using {FRACTALS_DIR} as FRACTALS_DIR to save images.")
 
 
 class DateConverter(BaseConverter):
@@ -114,9 +121,7 @@ def path_for_seed(seed, size):
 
     assert size in (1280, 640, 200), size
 
-    static = Path(__file__).parent / "static"
-    path = static / "df"
-    path /= str(size)
+    path = FRACTALS_DIR / str(size)
     path /= seed + ".png"
     return path
 

@@ -1,3 +1,8 @@
+"""
+Environement variables:
+ - FRACTALS_DIR: path to save all the computed fractals.
+"""
+
 import logging
 import random as _random
 from datetime import datetime, timedelta
