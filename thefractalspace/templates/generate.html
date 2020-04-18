@@ -248,7 +248,9 @@
 
         spawn_one(left) {
             if (this.spawns_left-- > 0) {
-                const radius = randRange(15, 35)
+                const radius = window.innerWidth < 640
+                    ? randRange(12, 24)
+                    : randRange(15, 35)
                 const pos = new Vec2(
                     left ? -radius - 10 : this.canvas.width + radius + 10,
                     this.canvas.height + radius + 10
@@ -365,7 +367,8 @@
     const tmpCtx = tmpCanvas.getContext("2d")
 
     window.addEventListener("load", () => {
-        new Animation(40).start()
+        const qte = window.innerWidth > 640 ? 30 : 10
+        new Animation(qte).start()
     })
 
     </script>

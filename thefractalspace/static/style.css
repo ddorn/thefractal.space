@@ -156,6 +156,7 @@ a:hover {
     margin-left: 2rem;
     padding: 0;
     font-weight: bold;
+    line-height: 1.5rem;
 }
 
 
@@ -349,7 +350,7 @@ picture {
 @media (max-width: 640px) {
     .top_bar {
         flex-direction: column;
-        padding: 1rem 0;
+        padding: 1.5rem 0;
         align-items: flex-start;
     }
     .bar__title {
@@ -386,6 +387,29 @@ picture {
     }
 
     .p--about {
+        width: 100%;
+    }
+
+    .generate__title {
+        font-size: 1.5rem;
+        width: auto;
+        margin: 0 auto;
+        line-height: revert;
+        text-align: center;
+    }
+
+    .generate_input {
+        width: 100%;
+    }
+
+    .generate + p {
+        width: 100%;
+        max-width: 100%;
+        font-size: .85rem;
+        line-height: 1.3rem;
+    }
+
+    form {
         width: 100%;
     }
 }
