@@ -2,19 +2,19 @@
 Environement variables:
  - FRACTALS_DIR: path to save all the computed fractals.
 """
-
+import io
+import brocoli.brocoli
 import random as _random
 from datetime import datetime, timedelta
+from logging.config import dictConfig
 
+import yaml
 from brocoli.processing.random_fractal import random_fractal
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, Response
 
 from .helpers import DateConverter, \
     infos, _daily_fractal, \
     path_for_seed, seed_for_date
-
-
-from logging.config import dictConfig
 
 dictConfig({
     'version': 1,
@@ -142,6 +142,21 @@ def img(seed):
         fractal.render(True).save(path)
 
     return send_from_directory(path.parent, path.name)
+
+
+@app.route("/img/<path:seed>.yaml")
+def yaml_src(seed):
+    fractal = random_fractal(seed=seed)
+    stream = io.StringIO()
+    stream.write("# You can regenerate the fractal with brocoli\n")
+    stream.write("# https://gitlab/ddorn/brocoli by running \n")
+    stream.write(f"# brocoli gen --yaml \"{seed}.yaml\"\n")
+    stream.write("# You can also tweek every parameter (size/color)\n")
+    stream.write("# And make it look even better!\n")
+    stream.write("# Have fun ! Diego\n")
+    yaml.dump(fractal, stream)
+    stream.seek(0)
+    return Response(stream, mimetype='text/yaml')
 
 
 if __name__ == '__main__':
