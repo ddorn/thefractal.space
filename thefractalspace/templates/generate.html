@@ -7,7 +7,8 @@
         <form action="{{ url_for("generate") }}" method="get">
 
             <input aria-label="Fractal Seed"
-                   name="seed" type="text"
+                   name="seed"
+                   type="text"
                    placeholder="Enter a seed..."
                    class="generate_input hitbox">
         </form>
@@ -187,7 +188,7 @@
                 this.img.src = tmpCanvas.toDataURL("image/png")
             }, {once: true})
             const seed = Math.floor(randRange(0, 1000))
-            this.img.src = `{{ url_for("img", size=200, seed="${seed}") }}`
+            this.img.src = `/img/${seed}.png?size=200`
 
         }
         render(ctx) {

@@ -8,16 +8,15 @@ import random as _random
 from datetime import datetime, timedelta
 
 from brocoli.processing.random_fractal import random_fractal
-from flask import Flask, render_template, redirect, url_for, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory
 
 from .helpers import DateConverter, \
     infos, _daily_fractal, \
-    path_for_seed, seed_for_date, seed_type, SeedConverter
+    path_for_seed, seed_for_date
 
 app = Flask(__name__)
 
 app.url_map.converters['date'] = DateConverter
-app.url_map.converters['seed'] = SeedConverter
 
 
 def fractal_page(fractal, title, seed, subtitle=None, date=None):
@@ -80,17 +79,18 @@ def about():
 
 @app.route("/generate")
 def generate():
-    seed = request.args.get("seed", type=seed_type)
+    seed = request.args.get("seed", type=str)
     if seed is None:
         return render_template("generate.html", title="Custom Fractal")
     return fractal_page(random_fractal(seed=seed), "Custom Fractal", seed, f"Seed: {seed}")
 
 
-@app.route("/img/<seed:seed>.png")
+@app.route("/img/<path:seed>.png")
 def img(seed):
+    """The seed can be any string.
+    Files are saved on the md5 hash of their name."""
     size = request.args.get("size", default=200, type=int)
 
-    logging.info("input %s", size)
     # Find a the next size that we provide that is bigger
     new = 1280
     for s in (1280, 640, 200):
@@ -100,9 +100,8 @@ def img(seed):
             break
     size = new
 
-    logging.info("output %s", size)
-
     path = path_for_seed(seed, size)
+    logging.info("Seed:", seed, "Path:"), path
 
     # Make sure the directory exists
     path.parent.mkdir(exist_ok=True)
@@ -118,7 +117,7 @@ def img(seed):
     return send_from_directory(path.parent, path.name)
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename="log.txt", level=logging.INFO)
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)

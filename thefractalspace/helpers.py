@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import os
 import re
@@ -31,23 +32,6 @@ class DateConverter(BaseConverter):
 
     def to_url(self, value):
         return value.strftime('%Y-%m-%d')
-
-
-class SeedConverter(BaseConverter):
-    """Extracts a 1 to 30 chars seed from the path and validates it."""
-
-    regex = r"[-+=._@a-zA-Z0-9]{1,30}"
-
-    def to_python(self, value):
-        try:
-            if re.match(self.regex, value):
-                return value
-            raise ValueError
-        except ValueError:
-            raise ValidationError()
-
-    def to_url(self, value):
-        return value
 
 
 @dataclass
@@ -121,17 +105,12 @@ def path_for_seed(seed, size):
 
     assert size in (1280, 640, 200), size
 
+    hashed = hashlib.md5(seed.encode()).hexdigest()
+
     path = FRACTALS_DIR / str(size)
-    path /= seed + ".png"
+    path /= hashed + ".png"
     return path
 
 
 def seed_for_date(date):
     return date.strftime("%Y-%m-%d")
-
-
-def seed_type(seed):
-    seed = str(seed)
-    if re.match(r"[-+=._@a-zA-Z0-9]{1,30}", seed):
-        return seed
-    raise ValueError
