@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% from "macros/macros.html" import fractal, navbar %}
+{% from "macros/macros.html" import fractal, navbar, icon %}
 
 {% block body %}
     <div class="container">
@@ -40,12 +40,23 @@
                         </span>
                     </li>
                 </ol>
+
+                <div class="download">
+                    <a href="{{ url_for("img", seed=seed, size=1920) }}" class="download__button" download>
+                        {{ icon("download") }} .png</a>
+                    <a href="{{ url_for("yaml_src", seed=seed) }}" class="download__button">
+                        {{ icon("download") }} .yaml</a>
+                </div>
             </div>
 
             {% if date %}
                 <footer class="separate_two">
-                    <a href="{{ url_for("daily_fractal", date=date-one_day) }}"><- Previous</a>
-                    <a href="{{ url_for("daily_fractal", date=date+one_day) }}">Next -></a>
+                    <a class="flex--center" href="{{ url_for("daily_fractal", date=date-one_day) }}">
+                        {{ icon("left-arrow") }} Previous
+                    </a>
+                    <a class="flex--center" href="{{ url_for("daily_fractal", date=date+one_day) }}">
+                        Next {{ icon("right-arrow") }}
+                    </a>
                 </footer>
             {% endif %}
 

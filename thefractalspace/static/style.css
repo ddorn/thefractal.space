@@ -12,7 +12,7 @@ del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
+fieldset, form, button, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
@@ -274,9 +274,35 @@ aside {
     height: 1.5rem;
 }
 
+
+.download {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.download__button {
+    display: flex;
+    justify-content: center;
+    background-color: #38a169;
+    color: var(--blue-900);
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+    border: 2px solid transparent;
+}
+
+.download__button:focus {
+    border: 2px solid var(--orange);
+}
+
 .separate_two {
     display: flex;
     justify-content: space-between;
+}
+.flex--center {
+    display: flex;
+    justify-content: center;
 }
 
 .title--about {
@@ -345,6 +371,12 @@ form {
 
 picture {
     display: block;
+}
+
+.icon {
+    display: inline;
+    height: 1em;
+    padding: 0 0.25em;
 }
 
 @media (max-width: 640px) {

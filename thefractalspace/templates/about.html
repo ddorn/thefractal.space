@@ -1,4 +1,5 @@
 {% extends "layouts/regular.html" %}
+{% from "macros/macros.html" import icon %}
 {% block content %}
     <h1 class="title--about">About this website</h1>
     <p class="p--about">
@@ -49,5 +50,10 @@
         unexpected names for my fractals!
     </p>
 
-
+    <p class="p--about">
+        Thanks to
+        <a href="https://heroicons.dev/" title="Freepik">
+            Heroicons</a>
+        for the nice icons I use. {{ icon("sun") }}
+    </p>
 {% endblock %}

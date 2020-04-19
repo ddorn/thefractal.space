@@ -98,7 +98,7 @@ def path_for_seed(seed, size):
     Please only pass a size that we do have fractals for.
     """
 
-    assert size in (1280, 640, 200), size
+    assert size in (1920, 1366, 640, 200), size
 
     hashed = hashlib.md5(seed.encode()).hexdigest()
 

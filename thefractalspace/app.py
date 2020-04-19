@@ -121,7 +121,7 @@ def img(seed):
 
     # Find a the next size that we provide that is bigger
     new = 1280
-    for s in (1280, 640, 200):
+    for s in (1920, 1366, 640, 200):
         if size <= s:
             new = s
         else:
