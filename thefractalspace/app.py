@@ -3,7 +3,6 @@ Environement variables:
  - FRACTALS_DIR: path to save all the computed fractals.
 """
 
-import logging
 import random as _random
 from datetime import datetime, timedelta
 
@@ -13,6 +12,35 @@ from flask import Flask, render_template, request, send_from_directory
 from .helpers import DateConverter, \
     infos, _daily_fractal, \
     path_for_seed, seed_for_date
+
+
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+        }
+    },
+    'handlers': {
+        'wsgi': {
+            'class': 'logging.StreamHandler',
+            'stream': 'ext://flask.logging.wsgi_errors_stream',
+            'formatter': 'default'
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'default',
+            'filename': 'log',
+            'maxBytes': 1024,
+        },
+    },
+    'root': {
+        'level': 'INFO',
+        'handlers': ['wsgi', 'file']
+    }
+})
 
 app = Flask(__name__)
 
@@ -101,23 +129,20 @@ def img(seed):
     size = new
 
     path = path_for_seed(seed, size)
-    logging.info("Seed:", seed, "Path:"), path
 
     # Make sure the directory exists
     path.parent.mkdir(exist_ok=True)
 
-    if not path.exists():
+    if path.exists():
+        app.logger.info("Using cache for seed '%s'", seed)
+    else:
         size = size, size * 9 // 16
         fractal = random_fractal(size, seed=seed)
-        logging.info("Rendering %s, size=%s", path, size)
+        app.logger.info("Rendering '%s', size=%s", seed, size)
         fractal.render(True).save(path)
-
-    logging.info("Loading %s, size=%s", path, size)
 
     return send_from_directory(path.parent, path.name)
 
-
-logging.basicConfig(filename="log.txt", level=logging.INFO)
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)

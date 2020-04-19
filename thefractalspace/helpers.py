@@ -1,7 +1,5 @@
 import hashlib
-import logging
 import os
-import re
 from dataclasses import dataclass
 from datetime import datetime
 from math import log10
@@ -13,10 +11,7 @@ from brocoli.processing.random_fractal import random_fractal
 from markupsafe import Markup
 from werkzeug.routing import BaseConverter, ValidationError
 
-
 FRACTALS_DIR = Path(os.environ.get("FRACTALS_DIR", Path(__file__).parent / "static" / "df"))
-
-logging.info(f"Using {FRACTALS_DIR} as FRACTALS_DIR to save images.")
 
 
 class DateConverter(BaseConverter):
