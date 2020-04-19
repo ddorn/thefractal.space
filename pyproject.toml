@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "thefractal.space"
-version = "1.0.1"
+version = "1.0.2"
 description = ""
 authors = ["ddorn <diego.dorn@free.fr>"]
 
