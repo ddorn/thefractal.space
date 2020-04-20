@@ -107,5 +107,31 @@ def path_for_seed(seed, size):
     return path
 
 
+def ensure_exists(seed, size, logger):
+    # Find a the next size that we provide that is bigger
+    new = 1920
+    for s in (1920, 1366, 640, 200):
+        if size <= s:
+            new = s
+        else:
+            break
+    size = new
+
+    path = path_for_seed(seed, size)
+
+    # Make sure the directory exists
+    path.parent.mkdir(exist_ok=True)
+
+    if path.exists():
+        logger.info("Using cache for seed '%s'", seed)
+    else:
+        size = size, size * 9 // 16
+        fractal = random_fractal(size, seed=seed)
+        logger.info("Rendering '%s', size=%s", seed, size)
+        fractal.render(True).save(path)
+
+    return path
+
+
 def seed_for_date(date):
     return date.strftime("%Y-%m-%d")

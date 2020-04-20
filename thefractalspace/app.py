@@ -14,7 +14,7 @@ from flask import Flask, render_template, request, send_from_directory, Response
 
 from .helpers import DateConverter, \
     infos, _daily_fractal, \
-    path_for_seed, seed_for_date
+    path_for_seed, seed_for_date, ensure_exists
 
 dictConfig({
     'version': 1,
@@ -118,28 +118,7 @@ def img(seed):
     """The seed can be any string.
     Files are saved on the md5 hash of their name."""
     size = request.args.get("size", default=200, type=int)
-
-    # Find a the next size that we provide that is bigger
-    new = 1280
-    for s in (1920, 1366, 640, 200):
-        if size <= s:
-            new = s
-        else:
-            break
-    size = new
-
-    path = path_for_seed(seed, size)
-
-    # Make sure the directory exists
-    path.parent.mkdir(exist_ok=True)
-
-    if path.exists():
-        app.logger.info("Using cache for seed '%s'", seed)
-    else:
-        size = size, size * 9 // 16
-        fractal = random_fractal(size, seed=seed)
-        app.logger.info("Rendering '%s', size=%s", seed, size)
-        fractal.render(True).save(path)
+    path = ensure_exists(seed, size, app.logger)
 
     return send_from_directory(path.parent, path.name)
 
@@ -158,6 +137,14 @@ def yaml_src(seed):
     stream.seek(0)
     return Response(stream, mimetype='text/yaml')
 
+
+@app.route("/build-cache")
+def build_cache():
+    app.logger.info("Completing cache for small images in generate.")
+    for i in range(1000):
+        ensure_exists(str(i), 200, app.logger)
+    app.logger.info("Cache built!")
+    return "Cache built!"
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)
