@@ -83,9 +83,16 @@
             this.inv_mass = 1 / (radius * radius)
 
             this.img = null
+            this.ready = false
             this.setBubbleImage()
         }
+        updatePos(dt) {
+            if (!this.ready) return;
+            this.pos.radd(this.vel.mult(dt))
+        }
         collideBorders(borderSize) {
+            if (!this.ready) return;
+
             if (this.pos.x - this.radius <= 0 && this.vel.x < 0) {
                 this.vel.x = -this.vel.x
             } else if (this.pos.x + this.radius >= borderSize.x && this.vel.x > 0 ) {
@@ -99,6 +106,8 @@
             }
         }
         collideBubble(other) {
+            if (!this.ready || !other.ready) return;
+
             let dist = this.pos.to(other.pos)
             const dist2 = dist.norm2()
             if (dist2 >= (this.radius + other.radius)**2) {
@@ -119,6 +128,8 @@
             return new Collision(this, other, normal, penetration)
         }
         collideRect(rect) {
+            if (!this.ready) return;
+
             // Find the closest point to the circle within the rectangle
             const closest = new Vec2(
                 clamp(this.pos.x, rect.min.x, rect.max.x),
@@ -186,12 +197,15 @@
                 tmpCtx.drawImage(this.img, sx, 0, sh, sh, 0, 0, this.radius * 2, this.radius * 2)
                 tmpCtx.restore()
                 this.img.src = tmpCanvas.toDataURL("image/png")
+                this.ready = true
+                console.log(this.pos)
             }, {once: true})
             const seed = Math.floor(randRange(0, 1000))
             this.img.src = `/img/${seed}.png?size=200`
 
         }
         render(ctx) {
+            if (!this.ready) return;
             ctx.drawImage(this.img, this.pos.x - this.radius, this.pos.y - this.radius)
         }
     }
@@ -305,7 +319,7 @@
         update(dt) {
             const borderSize = new Vec2(window.innerWidth, window.innerHeight)
             for (const bubble of this.bubbles) {
-                bubble.pos = bubble.pos.add(bubble.vel.mult(dt))
+                bubble.updatePos(dt)
                 bubble.collideBorders(borderSize)
             }
 
