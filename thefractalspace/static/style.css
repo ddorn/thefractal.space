@@ -236,11 +236,12 @@ a:hover {
 }
 
 .fractal {
-    min-width: 70vw;
+    max-height: calc(100vh - 2rem);
     /*width: 78%;*/
     /*height: 100vh;*/
     object-fit: cover;
     object-position: center;
+    flex-grow: 1;
 }
 
 .img_cover {
@@ -257,6 +258,7 @@ a:hover {
 
 aside {
     /*width: 22%;*/
+    min-width: 15rem;
     padding-left: 1rem;
     padding-bottom: 0.5rem;
     /*padding: 0.8rem;*/
@@ -441,7 +443,7 @@ picture {
     }
     .container {
         flex-direction: column;
-        min-height: 100vh;
+        /*min-height: 100vh;*/
     }
     .container--index .top_bar {
         padding: 0 1rem;
