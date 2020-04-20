@@ -6,12 +6,12 @@
         <source srcset="{{ url_for("img", seed=seed, size=640) }}"
             media="(max-width: 640px)">
         <img src="{{ url_for("img", seed=seed, size=1366) }}"
-             alt="Big Fractal {{ seed }}"
+             alt="The fractal '{{ seed }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
     {% else %}
         <img src="{{ url_for("img", seed=seed, size=200) }}"
-             alt="Small Fractal {{ seed }}"
+             alt="The Fractal '{{ seed }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
     {% endif %}
