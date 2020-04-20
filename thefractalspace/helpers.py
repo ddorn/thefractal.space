@@ -123,7 +123,7 @@ def ensure_exists(seed, size, logger):
     path.parent.mkdir(exist_ok=True)
 
     if path.exists():
-        logger.info("Using cache for seed '%s'", seed)
+        logger.debug("Using cache for seed '%s'", seed)
     else:
         size = size, size * 9 // 16
         fractal = random_fractal(size, seed=seed)
