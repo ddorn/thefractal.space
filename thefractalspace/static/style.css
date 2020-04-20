@@ -124,12 +124,11 @@ body {
 }
 
 .narrow_container {
-    max-width: 75%;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    padding-bottom: 2rem;
     min-height: 100vh;
+    border-top: 2px solid var(--orange);
 }
 
 a {
@@ -142,8 +141,10 @@ a:hover {
 }
 
 .top_bar {
+    width: 80%;
     padding: 1.5rem 0;
     align-items: center;
+    margin: 0 auto
     /*background: var(--blue-100);*/
 }
 
@@ -209,7 +210,6 @@ a:hover {
 
 .aside__title {
     color: var(--blue-700);
-    margin-top: 1rem;
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -222,7 +222,8 @@ a:hover {
 
 .fractal {
     width: 78%;
-    height: 100vh;
+    flex-grow: 1;
+    /*height: 100vh;*/
     object-fit: cover;
     object-position: center;
 }
@@ -244,6 +245,7 @@ aside {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 
@@ -382,6 +384,7 @@ picture {
 
 @media (max-width: 640px) {
     .top_bar {
+        width: 100%;
         flex-direction: column;
         padding: 1.5rem 0;
         align-items: flex-start;
