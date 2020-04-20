@@ -127,7 +127,8 @@ body {
     max-width: 75%;
     display: flex;
     flex-direction: column;
-    margin: 0 auto 2rem auto;
+    margin: 0 auto;
+    padding-bottom: 2rem;
     min-height: 100vh;
 }
 
@@ -366,7 +367,7 @@ form {
 .generate + p {
     max-width: 50vw;
     text-align: center;
-    margin: 2rem auto;
+    margin: 2rem auto 0 auto;
 }
 
 picture {
