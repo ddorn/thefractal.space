@@ -123,13 +123,23 @@ body {
     background: var(--blue-100);
 }
 
-.narrow_container {
+.container--narrow {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+    min-height: 100vh;
+}
+
+.container--index {
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     min-height: 100vh;
-    border-top: 2px solid var(--orange);
 }
+
 
 a {
     text-decoration: none;
@@ -141,11 +151,16 @@ a:hover {
 }
 
 .top_bar {
-    width: 80%;
+    width: 100%;
     padding: 1.5rem 0;
     align-items: center;
     margin: 0 auto
     /*background: var(--blue-100);*/
+}
+
+.container--index .top_bar {
+    padding: 0;
+    margin-bottom: 1rem;
 }
 
 .bar__title {
@@ -162,7 +177,7 @@ a:hover {
 }
 
 
-.brouse__container {
+.container--brouse {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
     grid-gap: 1rem;
@@ -221,6 +236,7 @@ a:hover {
 }
 
 .fractal {
+    min-width: 70vw;
     /*width: 78%;*/
     /*height: 100vh;*/
     object-fit: cover;
@@ -236,15 +252,13 @@ a:hover {
 
 .container {
     flex-grow: 1;
-    padding: 1rem;
-    padding-top: 0;
     display: flex;
 }
 
 aside {
     /*width: 22%;*/
-    margin-left: 1rem;
-    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
     /*padding: 0.8rem;*/
     display: flex;
     justify-content: space-between;
@@ -301,6 +315,10 @@ aside {
 
 .download__button:focus {
     border: 2px solid var(--orange);
+}
+
+.footer--index {
+    margin-top: 1rem;
 }
 
 .separate_two {
@@ -418,19 +436,28 @@ picture {
 
     }
 
+    .container--index {
+        padding: 1rem 0;
+    }
     .container {
         flex-direction: column;
         min-height: 100vh;
     }
+    .container--index .top_bar {
+        padding: 0 1rem;
+    }
 
     .fractal {
-        width: 100%;
-        height: 30vh;
+        /*height: 30vh;*/
+    }
+    .fractal .rounded {
+        border-radius: 0;
     }
     aside {
         width: 100%;
-        min-height: 70vh;
         justify-content: space-between;
+        padding: 1rem;
+        padding-bottom: 0;
     }
 
     .p--about {
