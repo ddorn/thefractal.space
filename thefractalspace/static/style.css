@@ -221,8 +221,7 @@ a:hover {
 }
 
 .fractal {
-    width: 78%;
-    flex-grow: 1;
+    /*width: 78%;*/
     /*height: 100vh;*/
     object-fit: cover;
     object-position: center;
@@ -236,12 +235,17 @@ a:hover {
 }
 
 .container {
+    flex-grow: 1;
+    padding: 1rem;
+    padding-top: 0;
     display: flex;
 }
 
 aside {
-    width: 22%;
-    padding: 0.8rem;
+    /*width: 22%;*/
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+    /*padding: 0.8rem;*/
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -382,6 +386,13 @@ picture {
     padding: 0 0.25em;
 }
 
+.rounded {
+    border-radius: 0.25rem;
+}
+
+.narrow {
+    width: 75%
+}
 @media (max-width: 640px) {
     .top_bar {
         width: 100%;
