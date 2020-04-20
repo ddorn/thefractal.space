@@ -2,7 +2,7 @@
 {% from "macros/macros.html" import fractal %}
 
 {% block content %}
-    <section class="brouse__container">
+    <section class="container--brouse">
 
         {% for day in days %}
             <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
