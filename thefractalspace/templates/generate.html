@@ -204,6 +204,14 @@
             this.img.src = `/img/${seed}.png?size=200`
 
         }
+        clear(ctx) {
+            if (!this.ready) return
+            const side = this.radius + 1;
+            ctx.clearRect(
+                this.pos.x - side, this.pos.y - side,
+                2 * side, 2 * side
+            )
+        }
         render(ctx) {
             if (!this.ready) return;
             ctx.drawImage(this.img, this.pos.x - this.radius, this.pos.y - this.radius)
@@ -356,13 +364,13 @@
         }
 
         render() {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.bubbles.forEach(bubble => bubble.render(this.ctx))
         }
 
         animation_frame(now) {
             // We cap dt at 0.1
             const dt = Math.min(0.1, (now - this.last) / 1000)
+            this.bubbles.forEach(b => b.clear(this.ctx))
             this.update(dt)
             this.render()
 
