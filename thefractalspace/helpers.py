@@ -137,10 +137,14 @@ def seed_for_date(date):
     return date.strftime("%Y-%m-%d")
 
 
-def my_log(seed, size, ip):
+def my_log(seed, size, request):
     if size <= 200:
         # Don't want to log the fractals from home page
         return
+
+    ip = request.environ.get('HTTP_X_FORWARDED_FOR',
+                             request.environ['REMOTE_ADDR'])
+
     log = f"{ip} - {seed} - {size}\n"
     with open("seeds_log", "at") as f:
         f.write(log)

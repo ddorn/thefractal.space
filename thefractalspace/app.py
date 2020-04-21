@@ -120,7 +120,7 @@ def img(seed):
     size = request.args.get("size", default=200, type=int)
     path = ensure_exists(seed, size, app.logger)
 
-    my_log(seed, size, request.environ['REMOTE_ADDR'])
+    my_log(seed, size, request)
 
     return send_from_directory(path.parent, path.name)
 
