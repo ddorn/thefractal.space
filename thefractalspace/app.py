@@ -14,7 +14,7 @@ from flask import Flask, render_template, request, send_from_directory, Response
 
 from .helpers import DateConverter, \
     infos, _daily_fractal, \
-    path_for_seed, seed_for_date, ensure_exists
+    path_for_seed, seed_for_date, ensure_exists, my_log
 
 dictConfig({
     'version': 1,
@@ -119,6 +119,8 @@ def img(seed):
     Files are saved on the md5 hash of their name."""
     size = request.args.get("size", default=200, type=int)
     path = ensure_exists(seed, size, app.logger)
+
+    my_log(seed, size, request.environ['REMOTE_ADDR'])
 
     return send_from_directory(path.parent, path.name)
 

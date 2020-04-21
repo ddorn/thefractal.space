@@ -135,3 +135,12 @@ def ensure_exists(seed, size, logger):
 
 def seed_for_date(date):
     return date.strftime("%Y-%m-%d")
+
+
+def my_log(seed, size, ip):
+    if size <= 200:
+        # Don't want to log the fractals from home page
+        return
+    log = f"{ip} - {seed} - {size}\n"
+    with open("seeds_log", "at") as f:
+        f.write(log)
