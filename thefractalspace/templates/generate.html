@@ -196,9 +196,8 @@
                 const sx = (this.img.width - sh) / 2
                 tmpCtx.drawImage(this.img, sx, 0, sh, sh, 0, 0, this.radius * 2, this.radius * 2)
                 tmpCtx.restore()
+                this.img.addEventListener("load", () => { this.ready = true}, {once: true})
                 this.img.src = tmpCanvas.toDataURL("image/png")
-                this.ready = true
-                console.log(this.pos)
             }, {once: true})
             const seed = Math.floor(randRange(0, 1000))
             this.img.src = `/img/${seed}.png?size=200`
