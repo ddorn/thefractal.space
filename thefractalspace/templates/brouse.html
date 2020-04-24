@@ -1,5 +1,5 @@
 {% extends "layouts/regular.html" %}
-{% from "macros/macros.html" import fractal %}
+{% from "macros/macros.html" import fractal, icon %}
 
 {% block content %}
     <section class="container--brouse">
@@ -16,11 +16,13 @@
 
     <footer class="brouse__footer">
         {% if page > 0 %}
-            <a href="{{ url_for("brouse", page=page - 1) }}"><- Previous</a>
+            <a href="{{ url_for("brouse", page=page - 1) }}" class="flex--center">
+                {{ icon("left-arrow") }} Previous</a>
         {% else %}
             <span></span>
         {% endif %}
-        <a href="{{ url_for("brouse", page=page + 1) }}">Next -></a>
+        <a href="{{ url_for("brouse", page=page + 1) }}" class="flex--center">
+            Next {{ icon("right-arrow") }}</a>
     </footer>
 
 {% endblock %}
