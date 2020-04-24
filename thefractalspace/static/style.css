@@ -415,6 +415,26 @@ picture {
 .narrow {
     width: 75%
 }
+
+/***********404 page**************/
+
+
+.title--huge {
+    text-align: center;
+    margin: 10% auto;
+    font-size: 13rem;
+    line-height: 9rem;
+    color: var(--blue-500);
+    flex-grow: 1;
+    user-select: none;
+}
+
+.bottom-note {
+    text-align: center;
+    margin: 2rem auto;
+    user-select: none;
+}
+
 @media (max-width: 640px) {
     .top_bar {
         width: 100%;
@@ -510,3 +530,4 @@ picture {
 }
 .hitbox {
 }
+

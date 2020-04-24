@@ -1,0 +1,55 @@
+{% extends "layouts/regular.html" %}
+
+{% block content %}
+
+    <p class="title--huge hitbox">404</p>
+    <p class="bottom-note hitbox">
+        What you are looking for is not there,
+        you may have more luck with the links above...
+    </p>
+    <canvas id="bubbles-canvas"></canvas>
+    <script src="{{ url_for("static", filename="bubbles.js") }}"></script>
+    <script async defer>
+
+        class SpawnAnimation extends Animation {
+            constructor(maxBubbles, canvasId) {
+                super(0, canvasId);
+                this.bubbles_prefetch = []
+                for (let i = 0; i < maxBubbles; i++) {
+                    this.bubbles_prefetch.push(
+                        new Bubble(null, null, randRange(15, 35))
+                    )
+                }
+            }
+
+            mouse_spawn(event) {
+                let bubble
+                if (this.bubbles_prefetch.length > 0) {
+                    bubble = this.bubbles_prefetch.pop()
+                } else {
+                    bubble = this.bubbles.shift()
+                    bubble.clear(this.ctx)
+                }
+                bubble.pos = new Vec2(event.clientX, event.clientY)
+                bubble.vel = Vec2.fromPolar(
+                    randRange(0, 2 * Math.PI),
+                    randRange(90, 140),
+                )
+                this.bubbles.push(bubble)
+            }
+
+            start() {
+                super.start();
+                window.addEventListener("click", (e) => this.mouse_spawn(e))
+            }
+
+            stop() {
+                super.stop();
+                window.removeEventListener("click", (e) => this.mouse_spawn(e))
+            }
+        }
+
+        const animation = new SpawnAnimation(60, "bubbles-canvas")
+        window.addEventListener("load", animation.start.bind(animation))
+    </script>
+{% endblock %}

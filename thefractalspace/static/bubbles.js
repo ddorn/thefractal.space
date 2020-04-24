@@ -58,8 +58,9 @@ class Bubble {
      * @param {Vec2} pos
      * @param {Vec2} vel
      * @param {int} radius
+     * @param seed
      */
-    constructor(pos, vel, radius) {
+    constructor(pos, vel, radius, seed=null) {
         radius = Math.floor(radius)
         this.pos = pos;
         this.vel = vel;
@@ -68,7 +69,7 @@ class Bubble {
 
         this.img = null
         this.ready = false
-        this.setBubbleImage()
+        this.setBubbleImage(seed)
     }
     updatePos(dt) {
         if (!this.ready) return;
@@ -132,7 +133,6 @@ class Bubble {
         const norm = Math.sqrt(norm2)
 
         if (closest.eq(this.pos)) {
-            console.log(this, rect)
             // Circle is inside the AABB, so we need to clamp the circle's center
             // to the closest edge
 
@@ -161,7 +161,7 @@ class Bubble {
         }
     }
 
-    setBubbleImage() {
+    setBubbleImage(seed) {
         this.img = new Image()
         this.img.addEventListener("load", () => {
             const tmpCanvas = document.createElement("canvas")
@@ -187,7 +187,10 @@ class Bubble {
             this.img.src = tmpCanvas.toDataURL("image/png")
             tmpCanvas.remove()
         }, {once: true})
-        const seed = Math.floor(randRange(0, 10000))
+        if (seed === null) {
+            seed = Math.floor(randRange(0, 10000))
+        }
+
         this.img.src = `/img/${seed}.png?size=${2 * this.radius}`
 
     }
