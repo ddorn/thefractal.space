@@ -4,7 +4,7 @@ description = ""
 name = "brocoli"
 optional = false
 python-versions = "^3.7"
-version = "0.3.0"
+version = "0.3.1"
 
 [package.dependencies]
 click = "^7.1.1"
@@ -19,7 +19,7 @@ tweepy = "^3.8.0"
 gui = ["kivy (^1.1)", "kivymd (^0.104.0)"]
 
 [package.source]
-reference = "0be76d01746b2df5da44fa4356c7593bb343baa2"
+reference = "b2577659468bb70c9c4146cf4422b1d6d4a4287f"
 type = "git"
 url = "https://gitlab.com/ddorn/brocoli"
 [[package]]
@@ -324,7 +324,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "d8a7e19cd0543618d6a8071ad467b0bda545eae1c079c57baf4dc07457b078e5"
+content-hash = "39ff4fa5986e2402823513b2e9522cdb7728958eee6fb17de35e9951bcbc00b4"
 python-versions = "^3.7"
 
 [metadata.files]
