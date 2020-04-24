@@ -7,7 +7,7 @@ authors = ["ddorn <diego.dorn@free.fr>"]
 [tool.poetry.dependencies]
 python = "^3.7"
 flask = "^1.1.0"
-brocoli = { git = "https://gitlab.com/ddorn/brocoli", rev = "0.3.1"}
+brocoli = { git = "https://gitlab.com/ddorn/brocoli", rev = "0.3.2"}
 gunicorn = {extras = ["eventlet"], version = "^20.0.0"}
 
 [build-system]
