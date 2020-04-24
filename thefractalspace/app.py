@@ -3,6 +3,8 @@ Environement variables:
  - FRACTALS_DIR: path to save all the computed fractals.
 """
 import io
+from io import BytesIO
+
 import brocoli.brocoli
 import random as _random
 from datetime import datetime, timedelta
@@ -124,6 +126,16 @@ def img(seed):
     """The seed can be any string.
     Files are saved on the md5 hash of their name."""
     size = request.args.get("size", default=200, type=int)
+    if 2 < size <= 100:
+        # We don't cache the very small ones
+        # and we compute the exact size for them
+        # in a square
+        fractal = random_fractal((size, size), seed=seed)
+        img = BytesIO()
+        fractal.render(True).save(img, "png")
+        img.seek(0)
+        return Response(img, mimetype="img/png")
+
     path = ensure_exists(seed, size, app.logger)
 
     my_log(seed, size, request)
