@@ -158,15 +158,6 @@ def yaml_src(seed):
     return Response(stream, mimetype="text/yaml")
 
 
-@app.route("/build-cache")
-def build_cache():
-    app.logger.info("Completing cache for small images in generate.")
-    for i in range(1000):
-        ensure_exists(str(i), 200, app.logger)
-    app.logger.info("Cache built!")
-    return "Cache built!"
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
