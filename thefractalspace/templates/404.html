@@ -14,6 +14,7 @@
         class SpawnAnimation extends Animation {
             constructor(maxBubbles, canvasId, preftech=5) {
                 super(0, canvasId);
+                this.mouse_pos = new Vec2(0, 0)
                 this.maxBubbles = maxBubbles
                 this.prefetch = preftech
                 this.bubbles_prefetch = []
@@ -24,26 +25,37 @@
                         new Bubble(null, null, randRange(15, 35))
                     )
                 }
+
+                this.spawn_id = null
             }
 
-            mouse_spawn(event) {
+            /**
+             * Spawn a bubble at pos if it can do so immediately
+             * using pre-fetched images.
+             * @param {Vec2} pos center of the bubble to spawn
+             */
+            spawn_at(pos) {
                 let bubble
                 if (this.bubbles_prefetch.length > 0) {
+                    if (!this.bubbles_prefetch[0].ready) {
+                        // Bubble is not ready, we do nothing
+                        return
+                    }
                     bubble = this.bubbles_prefetch.shift()
                     if (this.maxBubbles > 0) {
                         // We keep `this.prefetch` bubbles in the buffer
                         --this.maxBubbles
                         this.bubbles_prefetch.push(
-                            new Bubble(null, null, randRange(15, 35))
+                            new Bubble(null, null, randRange(12, 20))
                         )
                     }
+
                 } else {
                     bubble = this.bubbles.shift()
                     bubble.clear(this.ctx)
                 }
 
-
-                bubble.pos = new Vec2(event.clientX, event.clientY)
+                bubble.pos = pos
                 bubble.vel = Vec2.fromPolar(
                     randRange(0, 2 * Math.PI),
                     randRange(90, 140),
@@ -51,18 +63,39 @@
                 this.bubbles.push(bubble)
             }
 
+            start_spawn() {
+
+                if (this.spawn_id === null)
+                    this.spawn_id = setInterval(() => {
+                        this.spawn_at(this.mouse_pos.copy())
+                    }, 100)
+            }
+            update_mouse_pos(event) {
+                this.mouse_pos.x = event.clientX
+                this.mouse_pos.y = event.clientY
+            }
+            stop_spawn() {
+                if (this.spawn_id !== null)
+                    clearInterval(this.spawn_id)
+                    this.spawn_id = null
+            }
             start() {
                 super.start();
-                window.addEventListener("click", (e) => this.mouse_spawn(e))
+                window.addEventListener("mousedown", () => this.start_spawn())
+                window.addEventListener("mousemove", (e) => this.update_mouse_pos(e))
+                window.addEventListener("mouseup", () => this.stop_spawn())
             }
 
             stop() {
                 super.stop();
-                window.removeEventListener("click", (e) => this.mouse_spawn(e))
+                window.removeEventListener("mousedown", () => this.start_spawn())
+                window.removeEventListener("mousemove", (e) => this.update_mouse_pos(e))
+                window.removeEventListener("mouseup", () => this.stop_spawn())
+                this.stop_spawn()
             }
         }
 
-        const animation = new SpawnAnimation(75, "bubbles-canvas")
+        const animation = new SpawnAnimation(80, "bubbles-canvas")
         window.addEventListener("load", animation.start.bind(animation))
     </script>
 {% endblock %}

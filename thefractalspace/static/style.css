@@ -421,11 +421,10 @@ picture {
 
 .title--huge {
     text-align: center;
-    margin: 10% auto;
+    margin: auto;
     font-size: 13rem;
     line-height: 9rem;
     color: var(--blue-500);
-    flex-grow: 1;
     user-select: none;
 }
 

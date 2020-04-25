@@ -46,6 +46,9 @@ class Vec2 {
         return this.x === other.x && this.y === other.y
     }
 
+    copy() {
+        return new Vec2(this.x, this.y)
+    }
     toString() {
         return `Vec2(${this.x}, ${this.y})`
     }
