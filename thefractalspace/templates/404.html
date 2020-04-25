@@ -12,10 +12,14 @@
     <script async defer>
 
         class SpawnAnimation extends Animation {
-            constructor(maxBubbles, canvasId) {
+            constructor(maxBubbles, canvasId, preftech=5) {
                 super(0, canvasId);
+                this.maxBubbles = maxBubbles
+                this.prefetch = preftech
                 this.bubbles_prefetch = []
-                for (let i = 0; i < maxBubbles; i++) {
+                for (let i = 0; i < Math.min(preftech, maxBubbles); i++) {
+                    // Here it just starts the loading of the image
+                    --maxBubbles
                     this.bubbles_prefetch.push(
                         new Bubble(null, null, randRange(15, 35))
                     )
@@ -25,11 +29,20 @@
             mouse_spawn(event) {
                 let bubble
                 if (this.bubbles_prefetch.length > 0) {
-                    bubble = this.bubbles_prefetch.pop()
+                    bubble = this.bubbles_prefetch.shift()
+                    if (this.maxBubbles > 0) {
+                        // We keep `this.prefetch` bubbles in the buffer
+                        --this.maxBubbles
+                        this.bubbles_prefetch.push(
+                            new Bubble(null, null, randRange(15, 35))
+                        )
+                    }
                 } else {
                     bubble = this.bubbles.shift()
                     bubble.clear(this.ctx)
                 }
+
+
                 bubble.pos = new Vec2(event.clientX, event.clientY)
                 bubble.vel = Vec2.fromPolar(
                     randRange(0, 2 * Math.PI),
@@ -49,7 +62,7 @@
             }
         }
 
-        const animation = new SpawnAnimation(60, "bubbles-canvas")
+        const animation = new SpawnAnimation(75, "bubbles-canvas")
         window.addEventListener("load", animation.start.bind(animation))
     </script>
 {% endblock %}
