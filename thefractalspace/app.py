@@ -148,7 +148,7 @@ def yaml_src(seed):
     fractal = random_fractal(seed=seed)
     stream = io.StringIO()
     stream.write("# You can regenerate the fractal with brocoli\n")
-    stream.write("# https://gitlab/ddorn/brocoli by running \n")
+    stream.write("# https://gitlab.com/ddorn/brocoli by running \n")
     stream.write(f'# brocoli gen --yaml "{seed}.yaml"\n')
     stream.write("# You can also tweek every parameter (size/color)\n")
     stream.write("# And make it look even better!\n")
