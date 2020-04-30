@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "thefractal.space"
+name = "thefractalspace"
 version = "1.0.4"
 description = ""
 authors = ["ddorn <diego.dorn@free.fr>"]
