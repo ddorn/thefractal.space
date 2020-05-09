@@ -3,14 +3,14 @@
 {# else: about 200px #}
 <picture class="{{ class }}">
     {% if large %}
-        <source srcset="{{ url_for("img", seed=seed, size=640) }}"
+        <source srcset="{{ url("img", seed=seed, size=640) }}"
             media="(max-width: 640px)">
-        <img src="{{ url_for("img", seed=seed, size=1366) }}"
+        <img src="{{ url("img", seed=seed, size=1366) }}"
              alt="The fractal '{{ seed }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
     {% else %}
-        <img src="{{ url_for("img", seed=seed, size=200) }}"
+        <img src="{{ url("img", seed=seed, size=200) }}"
              alt="The Fractal '{{ seed }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
@@ -23,10 +23,10 @@
 
 {% macro navbar() %}
     <nav class="navbar">
-        <a href="{{ url_for("latest") }}" class="hitbox">Latest</a>
-        <a href="{{ url_for("brouse") }}" class="hitbox">Browse</a>
-        <a href="{{ url_for("random") }}" class="hitbox">Random</a>
-        <a href="{{ url_for("about") }}" class="hitbox">About</a>
+        <a href="{{ url("latest") }}" class="hitbox">Latest</a>
+        <a href="{{ url("brouse") }}" class="hitbox">Browse</a>
+        <a href="{{ url("random") }}" class="hitbox">Random</a>
+        <a href="{{ url("about") }}" class="hitbox">About</a>
     </nav>
 {% endmacro %}
 
