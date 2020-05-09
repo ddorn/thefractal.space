@@ -1,0 +1,72 @@
+{% extends "layouts/base.html" %}
+{% from "macros/macros.html" import fractal, navbar, icon %}
+
+{% block body %}
+    <div class="container--index">
+        <nav class="top_bar separate_two">
+            <a href="{{ url("home") }}" class="bar__title hitbox">The Fractal Space - Beta</a>
+            {{ navbar() }}
+        </nav>
+
+        <div class="container">
+
+            {{ fractal(f, True, "fractal", "rounded") }}
+
+            <aside>
+                <div>
+                    <h1 class="aside__title">{{ title }}</h1>
+                    {% if date %}
+                        <time datetime="d-m-Y" class="aside__subtitle">{{ date.strftime("%d %b %Y") }}</time>
+                    {% else %}
+                        <h2 class="aside__subtitle">{{ subtitle }}</h2>
+                    {% endif %}
+
+                    <ol class="aside__spec">
+                        {% for info in f.infos() %}
+                            <li>
+                                {% if info.hint %}
+                                    <abbr title="{{ info.hint }}">
+                                        <span class="spec__label">{{ info.label }}</span>
+                                    </abbr>
+                                {% else %}
+                                    <span class="spec__label">{{ info.label }}</span>
+                                {% endif %}
+                                <span>{{ info.value }}</span>
+                            </li>
+                        {% endfor %}
+
+{#                        <li>#}
+{#                            <span class="spec__label">Gradient</span>#}
+{#                            <span class="gradient-container">#}
+{#                                {% for color in gradient %}#}
+{#                                    <div class="color-rect" style="background: {{ color }}"></div>#}
+{#                                {% endfor %}#}
+{#                            </span>#}
+{#                        </li>#}
+                    </ol>
+{##}
+{#                    <div class="download">#}
+{#                        <a href="{{ url("img", seed=seed, size=1920) }}" class="download__button" download>#}
+{#                            {{ icon("download") }} .png</a>#}
+{#                        <a href="{{ url("yaml_src", seed=seed) }}" class="download__button">#}
+{#                            {{ icon("download") }} .yaml</a>#}
+{#                    </div>#}
+                </div>
+{##}
+{#                {% if date %}#}
+{#                    <footer class="footer--index separate_two">#}
+{#                        <a class="flex--center" href="{{ url("daily_fractal", date=date-one_day) }}">#}
+{#                            {{ icon("left-arrow") }} Previous#}
+{#                        </a>#}
+{#                        <a class="flex--center" href="{{ url("daily_fractal", date=date+one_day) }}">#}
+{#                            Next {{ icon("right-arrow") }}#}
+{#                        </a>#}
+{#                    </footer>#}
+{#                {% endif %}#}
+
+            </aside>
+        </div>
+
+
+    </div>
+{% endblock %}

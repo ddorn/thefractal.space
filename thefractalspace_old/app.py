@@ -57,7 +57,7 @@ app.url_map.converters["date"] = DateConverter
 def fractal_page(fractal, title, seed, subtitle=None, date=None):
     i = infos(fractal)
     return render_template(
-        "index.html",
+        "../thefractalspace/templates/index.html",
         title=title,
         subtitle=subtitle,
         date=date,
@@ -103,19 +103,23 @@ def brouse():
     first = datetime.today() - fracs_per_page * page * one_day
 
     days = [first - i * one_day for i in range(fracs_per_page)]
-    return render_template("brouse.html", days=days, title="Browse", page=page)
+    return render_template(
+        "../thefractalspace/templates/brouse.html", days=days, title="Browse", page=page
+    )
 
 
 @app.route("/about")
 def about():
-    return render_template("about.html", title="About")
+    return render_template("../thefractalspace/templates/about.html", title="About")
 
 
 @app.route("/generate")
 def generate():
     seed = request.args.get("seed", type=str)
     if seed is None:
-        return render_template("generate.html", title="Custom Fractal")
+        return render_template(
+            "../thefractalspace/templates/index.html", title="Custom Fractal"
+        )
     return fractal_page(
         random_fractal(seed=seed), "Custom Fractal", seed, f"Seed: {seed}"
     )
@@ -161,7 +165,7 @@ def yaml_src(seed):
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
-    return render_template("404.html"), 404
+    return render_template("../thefractalspace/templates/404.html"), 404
 
 
 if __name__ == "__main__":

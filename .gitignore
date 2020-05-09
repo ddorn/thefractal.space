@@ -3,3 +3,8 @@ __pycache__/
 thefractalspace/static/df/
 *.nix
 *log
+*.bkp
+thefractalspace/db.sqlite3
+**/migrations/
+
+*.egg-info

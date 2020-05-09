@@ -1,17 +1,17 @@
-{% macro fractal(seed, large = False, class="", img_class="") %}
-{# if large: almost fullscreen fractal #}
-{# else: about 200px #}
+{% macro fractal(f, large = False, class="", img_class="") %}
+{#- if large: almost fullscreen fractal #}
+{#- else: about 200px #}
 <picture class="{{ class }}">
     {% if large %}
-        <source srcset="{{ url("img", seed=seed, size=640) }}"
+        <source srcset="{{ url("img", id=f.id) + get(size=640) }}"
             media="(max-width: 640px)">
-        <img src="{{ url("img", seed=seed, size=1366) }}"
-             alt="The fractal '{{ seed }}' is computing, please be patient :)"
+        <img src="{{ url("img", id=f.id) + get(size=1366) }}"
+             alt="The fractal '{{ f.name }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
     {% else %}
-        <img src="{{ url("img", seed=seed, size=200) }}"
-             alt="The Fractal '{{ seed }}' is computing, please be patient :)"
+        <img src="{{ url("img", id=f.id) + get(size=200) }}"
+             alt="The Fractal '{{ f.name }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
     {% endif %}

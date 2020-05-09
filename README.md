@@ -11,7 +11,7 @@ poetry install
 ### Run
 
 ```shell script
-FLASK_DEBUG=1 TEMPLATE_AUTO_RELOAD=1 FLASK_APP=thefractalspace/app.py flask run --with-threads
+FLASK_DEBUG=1 TEMPLATE_AUTO_RELOAD=1 FLASK_APP=thefractalspace_old/app.py flask run --with-threads
 ```
 
 And see the result at http://localhost:5000

@@ -4,25 +4,34 @@
 {% block content %}
     <section class="container--brouse">
 
-        {% for day in days %}
-            <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">
-                {{ fractal(day.strftime("%Y-%m-%d"), class="card__img")}}
+        {% for f in fractals %}
+            <a href="{{ url("fractal") }}" class="brouse__card">
+                {{ fractal(f, class="card__img")}}
                 <time datetime="d-m-Y" class="card__title">
-                    {{ day.strftime("%d %b %Y") }}
+                    {{ f.created_at.strftime("%d %b %Y") }}
                 </time>
             </a>
         {% endfor %}
-    </section>
 
-    <footer class="brouse__footer">
-        {% if page > 0 %}
-            <a href="{{ url_for("brouse", page=page - 1) }}" class="flex--center">
-                {{ icon("left-arrow") }} Previous</a>
-        {% else %}
-            <span></span>
-        {% endif %}
-        <a href="{{ url_for("brouse", page=page + 1) }}" class="flex--center">
-            Next {{ icon("right-arrow") }}</a>
-    </footer>
+{#        {% for day in days %}#}
+{#            <a href="{{ url_for("daily_fractal", date=day) }}" class="brouse__card">#}
+{#                {{ fractal(day.strftime("%Y-%m-%d"), class="card__img")}}#}
+{#                <time datetime="d-m-Y" class="card__title">#}
+{#                    {{ day.strftime("%d %b %Y") }}#}
+{#                </time>#}
+{#            </a>#}
+{#        {% endfor %}#}
+    </section>
+{##}
+{#    <footer class="brouse__footer">#}
+{#        {% if page > 0 %}#}
+{#            <a href="{{ url_for("brouse", page=page - 1) }}" class="flex--center">#}
+{#                {{ icon("left-arrow") }} Previous</a>#}
+{#        {% else %}#}
+{#            <span></span>#}
+{#        {% endif %}#}
+{#        <a href="{{ url_for("brouse", page=page + 1) }}" class="flex--center">#}
+{#            Next {{ icon("right-arrow") }}</a>#}
+{#    </footer>#}
 
 {% endblock %}
