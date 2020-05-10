@@ -5,7 +5,7 @@
     <section class="container--brouse">
 
         {% for f in fractals %}
-            <a href="{{ url("fractal") }}" class="brouse__card">
+            <a href="{{ url("fractal", pk=f.id) }}" class="brouse__card">
                 {{ fractal(f, class="card__img")}}
                 <time datetime="d-m-Y" class="card__title">
                     {{ f.created_at.strftime("%d %b %Y") }}

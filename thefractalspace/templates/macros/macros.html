@@ -3,14 +3,14 @@
 {#- else: about 200px #}
 <picture class="{{ class }}">
     {% if large %}
-        <source srcset="{{ url("img", id=f.id) + get(size=640) }}"
+        <source srcset="{{ url("img", pk=f.id) + get(size=640) }}"
             media="(max-width: 640px)">
-        <img src="{{ url("img", id=f.id) + get(size=1366) }}"
+        <img src="{{ url("img", pk=f.id) + get(size=1366) }}"
              alt="The fractal '{{ f.name }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />
     {% else %}
-        <img src="{{ url("img", id=f.id) + get(size=200) }}"
+        <img src="{{ url("img", pk=f.id) + get(size=200) }}"
              alt="The Fractal '{{ f.name }}' is computing, please be patient :)"
              class="img_cover {{ img_class }}"
         />

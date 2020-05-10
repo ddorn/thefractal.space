@@ -2,6 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Fractal
+from .models import FractalModel
 
-admin.site.register(Fractal)
+admin.site.register(FractalModel)

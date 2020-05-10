@@ -14,11 +14,11 @@
 
             <aside>
                 <div>
-                    <h1 class="aside__title">{{ title }}</h1>
+                    <h1 class="aside__title">{{ f.name }}</h1>
                     {% if date %}
                         <time datetime="d-m-Y" class="aside__subtitle">{{ date.strftime("%d %b %Y") }}</time>
                     {% else %}
-                        <h2 class="aside__subtitle">{{ subtitle }}</h2>
+                        <h2 class="aside__subtitle">Seed: {{ f.seed }}</h2>
                     {% endif %}
 
                     <ol class="aside__spec">
@@ -44,13 +44,13 @@
 {#                            </span>#}
 {#                        </li>#}
                     </ol>
-{##}
-{#                    <div class="download">#}
-{#                        <a href="{{ url("img", seed=seed, size=1920) }}" class="download__button" download>#}
-{#                            {{ icon("download") }} .png</a>#}
-{#                        <a href="{{ url("yaml_src", seed=seed) }}" class="download__button">#}
-{#                            {{ icon("download") }} .yaml</a>#}
-{#                    </div>#}
+
+                    <div class="download">
+                        <a href="{{ url("img", pk=f.id) + get(size=1920) }}" class="download__button" download>
+                            {{ icon("download") }} .png</a>
+                        <a href="{{ url("yaml_src", pk=f.id) }}" class="download__button">
+                            {{ icon("download") }} .yaml</a>
+                    </div>
                 </div>
 {##}
 {#                {% if date %}#}
