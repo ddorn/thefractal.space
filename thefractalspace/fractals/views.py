@@ -1,5 +1,7 @@
+import io
 from pathlib import Path
 
+import yaml
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
@@ -30,7 +32,20 @@ def about(request):
 
 def yaml_src(request, pk):
     f = get_object_or_404(FractalModel, id=pk)
-    return HttpResponse(f.yaml(), content_type="yaml/yaml")
+    stream = io.StringIO()
+
+    stream.write("# You can regenerate the fractal with brocoli\n")
+    stream.write("# https://gitlab.com/ddorn/brocoli by running \n")
+    stream.write(f'# brocoli gen --yaml "{f.name}.yaml"\n')
+    stream.write("# You can also tweek every parameter (size/color...)\n")
+    stream.write("# And make it look even better!\n")
+    stream.write("# Have fun ! Diego\n")
+    yaml.dump(f.to_brocoli(), stream)
+    stream.seek(0)
+
+    response = HttpResponse(stream, content_type="yaml/yaml",)
+    response["Content-Disposition"] = f'attachment; filename="{f.name}.yaml"'
+    return response
 
 
 class Latest(generic.RedirectView):

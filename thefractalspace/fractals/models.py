@@ -14,7 +14,7 @@ from brocoli.fractal import Fractal
 from markupsafe import Markup
 
 
-KIND_TO_TRI = {
+TRI_TO_KIND = {
     "ESC": Coloration.TIME,
     "SMO": Coloration.SMOOTH_TIME,
     "ANG": Coloration.ANGLE,
@@ -23,7 +23,7 @@ KIND_TO_TRI = {
     "STR": Coloration.AVG_STRIDE,
 }
 
-TRI_TO_KIND = {value: key for key, value in KIND_TO_TRI.items()}
+KIND_TO_TRI = {value: key for key, value in TRI_TO_KIND.items()}
 
 
 @dataclass
@@ -43,7 +43,7 @@ class FractalModel(models.Model):
     created_by = models.ForeignKey(User, models.PROTECT, related_name="fractals")
     likes = models.ManyToManyField(User, blank=True)
 
-    fractal_kinds = [(tri, kind.value) for tri, kind in KIND_TO_TRI.items()]
+    fractal_kinds = [(tri, kind.value) for tri, kind in TRI_TO_KIND.items()]
 
     # Fractal parameters
     center_x = models.FloatField()
