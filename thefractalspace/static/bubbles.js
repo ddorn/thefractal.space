@@ -194,7 +194,7 @@ class Bubble {
             seed = Math.floor(randRange(0, 10000))
         }
 
-        this.img.src = `/img/${seed}.png?size=${2 * this.radius}`
+        this.img.src = `/f/img/${seed}.png?size=${2 * this.radius}`
 
     }
     clear(ctx) {

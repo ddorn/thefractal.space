@@ -53,5 +53,4 @@ class FractalDetailView(generic.DetailView):
 
 def img(request, pk):
     with open(Path(__file__).parent.parent / "static" / "logo.png", "rb") as f:
-        print("ok")
         return HttpResponse(f.read(), content_type="image/png")

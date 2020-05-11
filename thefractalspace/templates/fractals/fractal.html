@@ -35,14 +35,14 @@
                             </li>
                         {% endfor %}
 
-{#                        <li>#}
-{#                            <span class="spec__label">Gradient</span>#}
-{#                            <span class="gradient-container">#}
-{#                                {% for color in gradient %}#}
-{#                                    <div class="color-rect" style="background: {{ color }}"></div>#}
-{#                                {% endfor %}#}
-{#                            </span>#}
-{#                        </li>#}
+                        <li>
+                            <span class="spec__label">Gradient</span>
+                            <span class="gradient-container">
+                                {% for hex in f.gradient_points.split("-") %}
+                                    <div class="color-rect" style="background: {{ hex }}"></div>
+                                {% endfor %}
+                            </span>
+                        </li>
                     </ol>
 
                     <div class="download">
@@ -52,7 +52,7 @@
                             {{ icon("download") }} .yaml</a>
                     </div>
                 </div>
-{##}
+
 {#                {% if date %}#}
 {#                    <footer class="footer--index separate_two">#}
 {#                        <a class="flex--center" href="{{ url("daily_fractal", date=date-one_day) }}">#}
